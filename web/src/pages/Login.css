@@ -1,0 +1,80 @@
+.login-container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Adiciona direção de coluna para centralizar os elementos verticalmente */
+  padding: 20px; /* Adiciona padding para melhorar a responsividade */
+}
+
+.login-container form {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-container form input {
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  height: 48px;
+  padding: 0 20px;
+  font-size: 16px;
+  color: #666;
+}
+
+.login-container form input::placeholder {
+  color: #999;
+}
+
+.login-container form button {
+  margin-top: 10px;
+  border: 0;
+  border-radius: 4px;
+  height: 48px;
+  font-size: 16px;
+  background: #df4723;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+}
+
+.login-container form button:hover {
+  background: #c83d1d;
+}
+
+.toggle-button {
+  margin-top: 20px; /* Espaçamento acima do botão */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  height: 48px;
+  padding: 0 20px;
+  font-size: 16px;
+  background: #fff;
+  font-weight: bold;
+  color: #666;
+  cursor: pointer;
+}
+
+.toggle-button:hover {
+  background: #f0f0f0;
+}
+
+/* Regras de mídia para responsividade */
+@media (max-width: 768px) {
+  .login-container {
+    padding: 10px; /* Reduz o padding em telas menores */
+  }
+
+  .login-container form {
+    max-width: 100%; /* Garante que o formulário ocupe toda a largura disponível em telas menores */
+  }
+
+  .login-container form input,
+  .login-container form button,
+  .toggle-button {
+    height: 40px; /* Reduz a altura dos elementos em telas menores */
+    font-size: 14px; /* Reduz o tamanho da fonte em telas menores */
+  }
+}
