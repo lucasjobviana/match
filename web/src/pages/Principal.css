@@ -30,24 +30,22 @@ body {
 
 #container-wrapper {
   display: flex;
-  /* width: 90vw; */
   justify-content: center;
-  /* align-items: center; */
 }
 
 #logged-user-detail-container {
-  /* width: 100%; */
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  /* margin-bottom: 20px; */
-  /* margin-top: 20px; */
   margin: 10px;
   text-align: center;
 }
 
-#like-container, #dislike-container {
+#side-container-left {
+  display: flex;
+}
+.liked-container, .unliked-container {
   flex: 1;
   background: #fff;
   border-radius: 10px;
@@ -86,9 +84,6 @@ body {
   padding: 20px;
   border-radius: 8px;
   background: #f9f9f9;
-  /* display: flex;
-  flex-direction: column;
-  align-items: center; */
 }
 
 .profile-image {
@@ -100,7 +95,6 @@ body {
   min-height: 180px;
   border-radius: 50%;
   object-fit: none;
-  /* margin: 10px 0; */
   cursor: pointer;
 }
 
@@ -218,3 +212,101 @@ body {
   cursor: pointer;
 }
 
+/* 
+
+ #container-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 20px;
+  padding: 0 20px;
+}
+
+#side-container-left, #side-container-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  width: 100px;
+  margin-bottom: 20px;
+}
+
+.main-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.main-container li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.main-container footer {
+  text-align: center;
+}
+
+.profile-image {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  cursor: pointer;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  max-width: 300px;
+  margin-top: 10px;
+}
+
+.buttons button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.empty {
+  text-align: center;
+  color: #999;
+}
+
+.match-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+.match-container button {
+  background: #ff5a5f;
+  border: none;
+  padding: 10px 20px;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 20px;
+} */

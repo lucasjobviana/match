@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response } from 'express'; 
 
 export interface IBaseController<T> {
   findAllLikeByFieldName(fieldName: string, req: Request, res: Response): Promise<Response>;

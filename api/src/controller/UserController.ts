@@ -30,12 +30,7 @@ export default class UserController extends BaseController<TUser> implements ISe
  
   public async findPotentialMatches(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>): Promise<Response<any, Record<string, any>>> {
     const username = req.headers['username'] as string;
-    console.log('controller findpotentialmatches')
-    console.log(req.headers)
-    console.log(username)
-    console.log(Number(username))
     const users =  await this.userService.findPotentialMatches(username);
-    console.log(users)
     return res.status(200).json(users);
   } 
 
@@ -50,14 +45,18 @@ export default class UserController extends BaseController<TUser> implements ISe
     const data = await this.userService.like(idLoggedNumber, idTargetNumber);
     if(data.isMatch){
       const loggedSocket = req.connectedUsers[idLoggedNumber];  
-      const targetSocket = req.connectedUsers[idTargetNumber]
+      const targetSocket = req.connectedUsers[idTargetNumber];
+
+      
+        if (loggedSocket) {  
+          req.io.to(loggedSocket).emit('match', idTargetNumber);
+        }
+        if (targetSocket){
+          req.io.to(targetSocket).emit('match', idLoggedNumber)
+        }
+      
  
-      if (loggedSocket) {  
-				req.io.to(loggedSocket).emit('match', idTargetNumber);
-			}
-      if (targetSocket){
-        req.io.to(targetSocket).emit('match', idLoggedNumber)
-      }
+      
     }
     return res.status(200).json(data.user); 
   }
@@ -97,9 +96,11 @@ export default class UserController extends BaseController<TUser> implements ISe
     const data = await this.userService.undislikeToUser(idNumber, idTargetNumber);
     return res.status(200).json(data);
   }
-
+ 
   public async update(req: Request, res:Response) {
+    console.log('upppdateeee connntroollller')
     const { id } = req.params;
+    
     const data = req.body;
     const user = {
       name: data.name,

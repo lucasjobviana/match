@@ -1,7 +1,7 @@
 import { Request, Router, Response } from 'express';
-import { userController } from '../config';
+import { imageController, userController } from '../config';
 import SequelizeImageBlobModel from '../database/models/SequelizeImageBlobModel';
-const multer = require('multer');
+const multer = require('multer'); 
 const ImageBlob = SequelizeImageBlobModel;
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -25,16 +25,17 @@ router.post(
 router.post(
   '/dislike',
   (req: Request, res: Response) => userController.dislike(req, res),
-);
+); 
 
 router.post(
   '/undislike',
   (req: Request, res: Response) => userController.undislike(req, res),
 );
- 
+  
 router.put(
   '/:id/',
-  upload.single('file'),
+  upload.array('files',10),
+  async (req: Request, res: Response, next) => { await imageController.replaceAllUserImages(req, res, next)},
   async (req: Request, res: Response) => { await userController.update(req, res)},
 );
 
@@ -50,7 +51,7 @@ router.post('/upload/:id/', upload.single('file'), async (req: Request, res: Res
       if (!file) {console.log('nao tem file')
         console.log('nao tem file')
           return res.status(400).send('No file uploaded.');
-      }
+      } 
       const newImage = await ImageBlob.create({
           fileName: file.originalname,
           fileData: file.buffer,

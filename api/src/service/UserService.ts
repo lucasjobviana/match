@@ -52,15 +52,13 @@ export default class UserService extends BaseService<TUser> implements IUserServ
   }
  
   public async findPotentialMatches(username:string) {
-    console.log('findpotentialMatches service')
-    console.log(username)
     // const loggedUser = await SequelizeUserModel.findOne({where:{id},attributes:['username','id']})
     const loggedUser = await this.userModel.getWithAllAssociationsByUsername(username);
 
     if(!loggedUser) throw new AppResponseError('fds')
-      console.log(loggedUser)
+      // console.log(loggedUser)
     const result = await this.userModel.findPotentialMatches(loggedUser);
-  console.log(result)
+  // console.log(result)
     return result;
   }
   

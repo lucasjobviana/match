@@ -9,6 +9,7 @@ export type TUser = {
   relatedUsers?: TUser[],
   dislikeUsers?: TUser[],
   images: ImageBlob[],
+  matches?: TUser[],
   imageUrls?: string[]
 };
 

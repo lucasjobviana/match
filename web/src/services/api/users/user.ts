@@ -45,7 +45,7 @@ export const getAllUsers = async (username:string | undefined) => {
   }).then((response: { data: TUser[]; }) => {
     return response.data;
   });
-  console.log(users)
+  // console.log(users)
 
   const allUsers = users;
   allUsers.forEach((user)=>{
@@ -156,9 +156,9 @@ export const undislikeTo = async (idLoggedUser:number, idTargetUser:number) => {
   
 export const updateUser = async (idLoggedUser:number, formData:FormData) => {
   console.log('________user_________')
-  console.log(formData) //nao uso mais 
+  console.log(formData)  
   for (const pair of formData.entries()) {
-    console.log(`${pair[0]}: ${pair[1]}`);
+    console.log(`${pair[0]}: ${pair[1]}`); 
   }
   
   const updatedUser = await api.put(`/users/${idLoggedUser}`, formData, {

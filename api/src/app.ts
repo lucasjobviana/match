@@ -7,6 +7,7 @@ import userRouter from './route/user.routes';
 import loginRouter from './route/login.routes';
 import AppResponseError from './AppResponseError';
 import SequelizeImageBlobModel from './database/models/SequelizeImageBlobModel';
+import SequelizeUserModel from './database/models/SequelizeUserModel';
 
 class App {
   public app: express.Express;
@@ -47,6 +48,17 @@ this.app.get('/images/:id', async (req: Request, res: Response) => {
     return next();
   });
     this.app.use(cors());
+    this.app.get('/user/:id', async (req: Request, res:Response) =>{
+      const idTargetUser = req.params.id;
+      const user = await SequelizeUserModel.findOne({where:{id:idTargetUser},
+      include:{
+        model: SequelizeImageBlobModel,
+        as:'images',
+      }});
+      console.log(user)
+      return res.status(200).json(user);
+    
+    })
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(express.json());
     // this.app.use(this.io);
