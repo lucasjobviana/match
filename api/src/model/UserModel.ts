@@ -9,40 +9,95 @@ import SequelizeMatchModel from '../database/models/SequelizeMatchModel';
 export default class UserModel extends BaseModel<TUser> implements IFindAbleById<TUser>{
   constructor(
   ) { super(SequelizeUserModel,['id','name','phone','username']);  }
-  //s.user.login, inclue like, dislike, images
-  public async getWithAllAssociationsByUsername(username:string) {
+
+  public async getWithAllAssociationsByUsername(username: string) {
     const user = await SequelizeUserModel.findOne({
       where: {
         username,
       },
-      include: [{
-         model:SequelizeUserModel,
-         as:'relatedUsers',
-         attributes:['id','name'],
-         through: {
-          attributes: []
-        }
-      },{model:SequelizeUserModel,
-        as:'dislikeUsers',
-        attributes:['id','name'],
-        through: {
-          attributes: []
-        }}
-        // ,
-        // {
-        //   model:SequelizeUserModel,
-        //   as:'matchedUsers',
-        //   attributes:['id','name'],
-        //   through: {
-        //     attributes: []
-        //   }}
-        ,{
+      include: [
+        {
+          model: SequelizeUserModel,
+          as: 'relatedUsers',
+          attributes: ['id', 'name'],
+          through: {
+            attributes: []
+          }
+        },
+        {
+          model: SequelizeUserModel,
+          as: 'dislikeUsers',
+          attributes: ['id', 'name'],
+          through: {
+            attributes: []
+          }
+        },
+        {
+          model: SequelizeUserModel,
+          as: 'matchedUsersAsFirstUser',
+          attributes: ['id', 'name'],
+          through: {
+            attributes: []
+          }
+        },
+        {
+          model: SequelizeUserModel,
+          as: 'matchedUsersAsLastUser',
+          attributes: ['id', 'name'],
+          through: {
+            attributes: []
+          }
+        },
+        {
           model: SequelizeImageBlobModel,
-          as:'images',
-        }]
+          as: 'images',
+        }
+      ]
     });
-    return user;
+  
+    // Combine matched users from both aliases
+    const matchedUsers = [...user.matchedUsersAsFirstUser, ...user.matchedUsersAsLastUser];
+  
+    return {
+      ...user.toJSON(),
+      matchedUsers
+    };
   }
+  
+  //s.user.login, inclue like, dislike, images
+  // public async getWithAllAssociationsByUsername(username:string) {
+  //   const user = await SequelizeUserModel.findOne({
+  //     where: {
+  //       username,
+  //     },
+  //     include: [{
+  //        model:SequelizeUserModel,
+  //        as:'relatedUsers',
+  //        attributes:['id','name'],
+  //        through: {
+  //         attributes: []
+  //       }
+  //     },{model:SequelizeUserModel,
+  //       as:'dislikeUsers',
+  //       attributes:['id','name'],
+  //       through: {
+  //         attributes: []
+  //       }}
+  //       ,
+  //       {
+  //         model:SequelizeUserModel,
+  //         as:'matchedUsers',
+  //         attributes:['id','name'],
+  //         through: {
+  //           attributes: []
+  //         }}
+  //       ,{
+  //         model: SequelizeImageBlobModel,
+  //         as:'images',
+  //       }]
+  //   });
+  //   return user;
+  // }
   //s.user.findPotentialMatches like
   public async getWithLikesById(id: number) {
     

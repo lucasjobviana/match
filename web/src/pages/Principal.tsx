@@ -99,6 +99,17 @@ export default function Principal() {
     navigate('/');
   };
 
+  const handleClickMatchSpan = (matchDev) => {
+    const matches = user?.matchedUsers;
+    const newUser = user;
+    newUser && newUser.matchedUsers && newUser?.matchedUsers.push(matchDev);
+    console.log(newUser?.matchedUsers)
+    console.log(newUser?.matchedUsers?.find((u)=>u.id === matchDev.id));
+    if(!newUser?.matchedUsers?.find((u)=>u.id === matchDev.id)){
+      setUser(newUser)
+    }
+    setMatchDev(null);
+  }
   const currentUser = potentialUsers[currentIndex];
 
   return (
@@ -160,13 +171,13 @@ export default function Principal() {
               {/* <img className="avatar" src={matchDev.imageUrls[0]} alt="Dev avatar" /> */}
               <strong>{matchDev.name}</strong>
               <p>{matchDev.resume}</p>
-              <button type="button" onClick={() => setMatchDev(null)}>FECHAR</button>
+              <button type="button" onClick={() => handleClickMatchSpan(matchDev)}>FECHAR</button>
             </div>
           )} 
           
         </div>
         <div id="side-container-right">
-          <MatchContainer />
+          <MatchContainer matched={user?.matchedUsers} />
         </div>
       </div>
     </>

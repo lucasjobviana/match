@@ -56,11 +56,24 @@ import SequelizeMatchModel from './SequelizeMatchModel';
     otherKey: 'user_target_id',
   });
 
+  // SequelizeUserModel.belongsToMany(SequelizeUserModel, {
+  //   through:{ model: SequelizeMatchModel}, // Nome da tabela intermediária
+  //   as: 'matchedUsers',
+  //   foreignKey: 'first_user_id',
+  //   otherKey: 'last_user_id',
+  // });
   SequelizeUserModel.belongsToMany(SequelizeUserModel, {
-    through:{ model: SequelizeMatchModel}, // Nome da tabela intermediária
-    as: 'matchedUsers',
+    through: { model: SequelizeMatchModel }, // Nome da tabela intermediária
+    as: 'matchedUsersAsFirstUser',
     foreignKey: 'first_user_id',
     otherKey: 'last_user_id',
+  });
+  
+  SequelizeUserModel.belongsToMany(SequelizeUserModel, {
+    through: { model: SequelizeMatchModel }, // Nome da tabela intermediária
+    as: 'matchedUsersAsLastUser',
+    foreignKey: 'last_user_id',
+    otherKey: 'first_user_id',
   });
 
   SequelizeUserModel.hasMany(SequelizeImageBlobModel, {
