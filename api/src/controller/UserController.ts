@@ -6,7 +6,7 @@ import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
 import AppResponseError from '../AppResponseError';
 import { IUserService } from '../interface/IUserService';
- 
+
 export default class UserController extends BaseController<TUser> implements ISearchAbleByName{
   constructor(
     private userService: IUserService,
@@ -43,21 +43,26 @@ export default class UserController extends BaseController<TUser> implements ISe
     const idLoggedNumber = Number.parseInt(idLoggedUser);
     const idTargetNumber = Number.parseInt(idTargetUser);
     const data = await this.userService.like(idLoggedNumber, idTargetNumber);
+    console.log('here +++++')
+    console.log(data)
     if(data.isMatch){
+      console.log('no if')
       const loggedSocket = req.connectedUsers[idLoggedNumber];  
       const targetSocket = req.connectedUsers[idTargetNumber];
 
       
         if (loggedSocket) {  
-          req.io.to(loggedSocket).emit('match', idTargetNumber);
+          req.io.to(loggedSocket).emit('match', JSON.stringify( data.isMatch));
         }
         if (targetSocket){
-          req.io.to(targetSocket).emit('match', idLoggedNumber)
+          req.io.to(targetSocket).emit('match', JSON.stringify(data.user))
         }
       
  
       
     }
+    console.log('vou retornar')
+    console.log(data.user)
     return res.status(200).json(data.user); 
   }
 

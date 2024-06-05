@@ -6,7 +6,7 @@ class UserDislikeToUser extends Model<InferAttributes<UserDislikeToUser>, InferC
     declare userLoggedId: number;
     declare userTargetId: number;
   }
-  
+   
   UserDislikeToUser.init({
     userLoggedId: {
       type: DataTypes.INTEGER,

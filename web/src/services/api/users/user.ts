@@ -14,6 +14,7 @@ export const login = async (username:string, password:string) => {
     });
     user.imageUrls = urls;
   }
+  console.log(user)
   if(user) return user;
   return null;
 }

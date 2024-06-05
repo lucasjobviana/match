@@ -10,5 +10,6 @@ export type TUser = {
   likeTo?: number[],
   relatedUsers?: TUser[],
   dislikeUsers?: TUser[],
+  matchedUsers?: TUser[],
   images?: TImageBlob[]
 };

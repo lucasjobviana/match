@@ -11,10 +11,10 @@ export default function MatchContainer() {
   
   return (
     <div className="matches-container">
-      { user && user.matches && user.matches.length > 0 ? (
+      { user && user.matchedUsers && user.matchedUsers.length > 0 ? (
         <ul>
           {
-          user.matches.map((u:TUser) => (
+          user.matchedUsers.map((u:TUser) => (
             <li key={u.id}>
               <footer>
                 <strong>{u.name || u.username}</strong>

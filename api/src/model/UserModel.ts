@@ -4,6 +4,7 @@ import SequelizeUserModel from '../database/models/SequelizeUserModel';
 import { TUser } from '../interface';
 import { IFindAbleById } from '../interface/IFindAbleById';
 import SequelizeImageBlobModel from '../database/models/SequelizeImageBlobModel';
+import SequelizeMatchModel from '../database/models/SequelizeMatchModel';
   
 export default class UserModel extends BaseModel<TUser> implements IFindAbleById<TUser>{
   constructor(
@@ -26,7 +27,16 @@ export default class UserModel extends BaseModel<TUser> implements IFindAbleById
         attributes:['id','name'],
         through: {
           attributes: []
-        }},{
+        }}
+        // ,
+        // {
+        //   model:SequelizeUserModel,
+        //   as:'matchedUsers',
+        //   attributes:['id','name'],
+        //   through: {
+        //     attributes: []
+        //   }}
+        ,{
           model: SequelizeImageBlobModel,
           as:'images',
         }]
@@ -71,8 +81,8 @@ export default class UserModel extends BaseModel<TUser> implements IFindAbleById
   //s.user.findPotentialMatches images
   // findPotentialMatches(user:TUser): Promise<TUser[]>,
   public async findPotentialMatches(user:TUser): Promise<TUser[]> {
-    console.log('findpotentialmatches ');
-    console.log(user)
+    // console.log('findpotentialmatches ');
+    // console.log(user)
     const likkedUsers = user.relatedUsers?.map((u)=>u.id) ?? [];
     const dislikkedUsers = user.dislikeUsers?.map((u)=>u.id) ?? [];
     return SequelizeUserModel.findAll({
@@ -91,5 +101,25 @@ export default class UserModel extends BaseModel<TUser> implements IFindAbleById
        }]
       
     });
+  }
+
+  public async getWithLikesImagesById(id: number) {
+    
+    return await SequelizeUserModel.findOne({
+      where: {
+        id:id,
+      },
+      include: [{
+        model:SequelizeUserModel,
+        as:'relatedUsers',
+        attributes:['id','name'],
+        through: {
+         attributes: []
+       }
+     },{
+         model: SequelizeImageBlobModel,
+         as:'images',
+       }]
+    }) || null;
   }
 } 

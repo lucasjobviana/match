@@ -59,7 +59,7 @@ import SequelizeMatchModel from './SequelizeMatchModel';
   SequelizeUserModel.belongsToMany(SequelizeUserModel, {
     through:{ model: SequelizeMatchModel}, // Nome da tabela intermediária
     as: 'matchedUsers',
-    foreignKey: 'fist_user_id',
+    foreignKey: 'first_user_id',
     otherKey: 'last_user_id',
   });
 

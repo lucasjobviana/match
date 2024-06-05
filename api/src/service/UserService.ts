@@ -64,13 +64,14 @@ export default class UserService extends BaseService<TUser> implements IUserServ
   
   public async like(userLoggedId: number, userTargetId:number): Promise<TServiceLikeResponse> {
     const loggedUser = await this.userModel.getWithLikesById(userLoggedId)
-    const targetUser = await this.userModel.getWithLikesById(userTargetId)
-    let isMatch = false;
+    // const targetUser = await this.userModel.getWithLikesById(userTargetId)
+    const targetUser = await this.userModel.getWithLikesImagesById(userTargetId)
+    let isMatch: TUser|null = null;
 
     if(loggedUser && targetUser){
       // const userLikedUsers = loggedUser.relatedUsers?.map((user) => user.id) ;
       const targetLikedUsers = targetUser.relatedUsers?.map((user) => user.id);
-      await SequelizeLikeModel.create({userLoggedId: userLoggedId, userTargetId: userTargetId});
+      await SequelizeLikeModel.create({userLoggedId, userTargetId});
 
       if(targetLikedUsers?.some((e) => e === userLoggedId )){  
         // await SequelizeLikeModel.create({userLoggedId, userTargetId});
@@ -79,7 +80,9 @@ export default class UserService extends BaseService<TUser> implements IUserServ
           lastUserId: Math.max(userLoggedId, userTargetId)
         });
 
-        isMatch = true;
+        // isMatch = true;
+        isMatch = targetUser; 
+        
       }
       // else if(!userLikedUsers?.some((e)=> e === userTargetId)){
       //   await SequelizeLikeModel.create({userLoggedId, userTargetId});

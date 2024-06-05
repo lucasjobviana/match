@@ -8,5 +8,6 @@ export interface IUserModel extends
   IFindAbleById<TUser>,
   IFindAbleByName<TUser> {
     findPotentialMatches(user:TUser): Promise<TUser[]>,
+    getWithLikesImagesById(id:number): Promise<TUser>
   // login(name:string): Promise<TUser>,
 }
