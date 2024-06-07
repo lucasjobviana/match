@@ -100,14 +100,16 @@ export default function Principal() {
   };
 
   const handleClickMatchSpan = (matchDev) => {
-    const matches = user?.matchedUsers;
-    const newUser = user;
-    newUser && newUser.matchedUsers && newUser?.matchedUsers.push(matchDev);
-    console.log(newUser?.matchedUsers)
-    console.log(newUser?.matchedUsers?.find((u)=>u.id === matchDev.id));
-    if(!newUser?.matchedUsers?.find((u)=>u.id === matchDev.id)){
-      setUser(newUser)
-    }
+    console.log(matchDev)
+    console.log(user)
+    // const matches = user?.matchedUsers;
+    // const newUser = user;
+    // // newUser && newUser.matchedUsers && newUser?.matchedUsers.push(matchDev);
+    // console.log(newUser?.matchedUsers)
+    // console.log(newUser?.matchedUsers?.find((u)=>u.id === matchDev.id));
+    // if(!newUser?.matchedUsers?.find((u)=>u.id === matchDev.id)){
+    //   // setUser(newUser)
+    // }
     setMatchDev(null);
   }
   const currentUser = potentialUsers[currentIndex];
@@ -177,7 +179,7 @@ export default function Principal() {
           
         </div>
         <div id="side-container-right">
-          <MatchContainer matched={user?.matchedUsers} />
+          <MatchContainer matched={user?.matchedUsers} isNewMatch={matchDev} />
         </div>
       </div>
     </>

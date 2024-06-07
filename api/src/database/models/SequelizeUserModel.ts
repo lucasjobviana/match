@@ -76,6 +76,14 @@ import SequelizeMatchModel from './SequelizeMatchModel';
     otherKey: 'first_user_id',
   });
 
+  SequelizeMatchModel.belongsTo(SequelizeUserModel,{
+    as:'FirstUser', foreignKey:'firstUserId'
+  })
+
+  SequelizeMatchModel.belongsTo(SequelizeUserModel,{
+    as:'LastUser', foreignKey:'lastUserId'
+  })
+
   SequelizeUserModel.hasMany(SequelizeImageBlobModel, {
     foreignKey: 'userId',
     as: 'images',

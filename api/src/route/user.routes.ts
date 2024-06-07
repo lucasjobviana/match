@@ -12,6 +12,11 @@ router.get(
   (req: Request, res: Response) => userController.findPotentialMatches(req, res),
 );
 
+router.get( 
+  '/matchs',
+  (req: Request, res: Response) => userController.findAllMatchesById(req, res),
+);
+
 router.post(
   '/like',
   (req: Request, res: Response) => userController.like(req, res),

@@ -6,10 +6,12 @@ import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
 import AppResponseError from '../AppResponseError';
 import { IUserService } from '../interface/IUserService';
+import { IMatchService } from '../interface/IMatchService';
 
 export default class UserController extends BaseController<TUser> implements ISearchAbleByName{
   constructor(
     private userService: IUserService,
+    private matchService: IMatchService,
   ) { super(userService); }
 
   public async login(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>, next:NextFunction){
@@ -26,13 +28,28 @@ export default class UserController extends BaseController<TUser> implements ISe
     const {username, password} = req.body;
     const loggedUser = await this.userService.register(username, password);
     return res.status(200).json(loggedUser);
-  }
+  } 
  
   public async findPotentialMatches(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>): Promise<Response<any, Record<string, any>>> {
     const username = req.headers['username'] as string;
     const users =  await this.userService.findPotentialMatches(username);
-    return res.status(200).json(users);
+    return res.status(200).json(users); 
   } 
+
+  public async findAllMatchesById(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>): Promise<Response<any, Record<string, any>>>{
+    const id = req.headers['id'] as string;
+    console.clear()
+    console.log('allMatchesbyid: ',id)
+    // const matchA = await this.matchService.findAllLikeByFieldName('firstUserId',id);
+    // const matchB = await this.matchService.findAllLikeByFieldName('lastUserId',id);
+    const matchC = await this.matchService.findAllMatchesById(Number(id));
+    // console.log(matchA)
+    // console.log(matchB)
+    // console.log(matchC)
+    // const matchedUsers = [...matchA, ...matchB];
+    // console.log(matchedUsers)
+    return  res.status(200).json(matchC);
+  }
 
   public async like(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>):Promise<Response<any, Record<string, any>>>{
     const idLoggedUser = req.headers['user'] as string; // Pegando o ID do usuário logado do cabeçalho

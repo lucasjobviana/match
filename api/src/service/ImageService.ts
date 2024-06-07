@@ -20,7 +20,7 @@ export default class ImageService extends BaseService<TImageBlob> implements IIm
 
 
     const images = files.map((image) => ({
-      fileName:image.originalname, 
+      fileName:image.originalname,  
       fileData: image.buffer,
       userId: Number(id)
     }))

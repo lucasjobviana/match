@@ -140,7 +140,7 @@ export default class UserModel extends BaseModel<TUser> implements IFindAbleById
     // console.log(user)
     const likkedUsers = user.relatedUsers?.map((u)=>u.id) ?? [];
     const dislikkedUsers = user.dislikeUsers?.map((u)=>u.id) ?? [];
-    return SequelizeUserModel.findAll({
+    return await SequelizeUserModel.findAll({
       where: {
         [Op.and]:{
           ['name']: {
