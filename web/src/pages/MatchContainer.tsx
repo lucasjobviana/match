@@ -1,35 +1,17 @@
 import like from '../../src/assets/like.svg';
-import { useEffect, useState } from 'react';
-import { api } from '../services/api';
+import { useEffect } from 'react';
 import { useLoginContext } from '../context/LoginContext';
+import { useMatchContext } from '../context/MatchContext';
 import { TUser } from '../Type';
  
-export default function MatchContainer({matched,isNewMatch}) {
+export default function MatchContainer({isNewMatch}) {
   const { user, unlike_to } = useLoginContext();
-  const [matches, setMatches] = useState<TUser[] | []>([]);
-  console.log('lllll lll l lll')
-  console.log(matched)
+  const { matches, load_matches} = useMatchContext();
 
-  useEffect(() => {
-    console.log('atualizando matches')
-    async function loadUsers() {
-      if (user) {
-        const users = await api.get('/users/matchs', {
-          headers: {
-            id: user.id,
-          }
-        }).then((response: { data: TUser[]; }) => {
-          return response.data;
-        });
-        console.log('matchs atualizado')
-        console.log(users)
-        setMatches(users);
-        // setPotentialUsers(u);
-        // setCurrentIndex(0);
-        // setCurrentPhotoIndex(0);
-      }
+  useEffect(() => {   
+    if(user){
+      load_matches(user?.id);
     }
-    loadUsers();
   }, [isNewMatch]);//ok
 
   async function handleLike(id:number) {

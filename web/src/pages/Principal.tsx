@@ -13,6 +13,7 @@ import LoggedUserDetailContainer from './LoggedUserDetailContainer';
 import UnlikedContainer from './UnlikedContainer';
 import './Principal.css';
 import MatchContainer from './MatchContainer';
+import { MatchProvider } from '../context/MatchContext';
 
 export default function Principal() {
   const [potentialUsers, setPotentialUsers] = useState<TUser[]>([]);
@@ -178,9 +179,11 @@ export default function Principal() {
           )} 
           
         </div>
-        <div id="side-container-right">
-          <MatchContainer matched={user?.matchedUsers} isNewMatch={matchDev} />
-        </div>
+        <MatchProvider>
+          <div id="side-container-right">
+            <MatchContainer isNewMatch={matchDev} />
+          </div>
+        </MatchProvider>
       </div>
     </>
   );
