@@ -11,16 +11,16 @@ import AppResponseError from '../AppResponseError';
 export default class MatchService extends BaseService<TMatch> implements IMatchService {
   constructor(
     private matchModel:BaseModel<TMatch> & IMatchModel,
-  ) { super(matchModel); }
+  ) { super(matchModel); } 
 
   public async findAllMatchesById(id: number): Promise<TUser[]> {
     const targetMatches = await this.matchModel.findAllMatchesById(id);
     if(!targetMatches) throw new AppResponseError('não tem mathces')
       const promises = targetMatches.map(async (target) => {
         const images = await SequelizeImageBlobModel.findAll({ where: { userId: target.matchedUser?.id } });
-        console.log(images)
+        // console.log(images)
         const imagesFile = images.map((i)=>i.dataValues);
-        console.log(imagesFile)
+        // console.log(imagesFile)
         return { 
           
           images:imagesFile  || [],
@@ -28,7 +28,8 @@ export default class MatchService extends BaseService<TMatch> implements IMatchS
           name: target.matchedUser?.name,
           username: target.matchedUser?.username,
           password: '',
-          phone: target.matchedUser?.phone
+          phone: target.matchedUser?.phone,
+          resume: target.matchedUser.resume
           // matchedUser: {
           //   ...target.matchedUser,
           //   images

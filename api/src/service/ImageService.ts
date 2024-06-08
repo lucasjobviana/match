@@ -11,12 +11,12 @@ export default class ImageService extends BaseService<TImageBlob> implements IIm
   ) { super(imageModel); }
 
   public async replaceAllUserImages(id: number, files: TImageBlob[]) {
-    console.log('_________________________________')
-    console.log(id)
-    console.log(files)
+    // console.log('_________________________________')
+    // console.log(id)
+    // console.log(files)
     await SequelizeImageBlobModel.destroy({where:{userId:id}})
-    console.clear()
-    console.log('ja destrui')
+    // console.clear()
+    // console.log('ja destrui')
 
 
     const images = files.map((image) => ({
@@ -29,8 +29,8 @@ export default class ImageService extends BaseService<TImageBlob> implements IIm
       fileData: files[0].buffer,
       userId: Number(id),
     };
-    console.log(newImage)
-    console.log(images)
+    // console.log(newImage)
+    // console.log(images)
     await SequelizeImageBlobModel.bulkCreate(images)
   // console.log(files[0])
   // console.log(newImage)

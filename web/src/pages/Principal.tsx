@@ -39,6 +39,7 @@ export default function Principal() {
       const socket = io('http://192.168.200.110:3001', { query: { user: user.id } });
 
       socket.on('match', (dev) => {
+        console.log(dev)
         setNewMatches((prevMatchDev) => [...prevMatchDev, JSON.parse(dev)]);
       });
 
@@ -88,10 +89,10 @@ export default function Principal() {
         <LoggedUserDetailContainer />
       </div>
       <div id="container-wrapper">
-        <div id="side-container-left">
+        {/* <div id="side-container-left">
           <LikedContainer />
           <UnlikedContainer />
-        </div>
+        </div> */}
         <div className="main-container">
           <Link to="/">
             <img src={logo} alt="Tinjob" className="logo" />

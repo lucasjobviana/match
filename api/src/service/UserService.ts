@@ -34,10 +34,10 @@ export default class UserService extends BaseService<TUser> implements IUserServ
   }
 
   public async update(id:string, obj:TUser){
-    console.log('service user update: ', id) 
-    console.log(obj)
+    // console.log('service user update: ', id) 
+    // console.log(obj)
     const updatedObj = await this.userModel.update(id, obj);
-    console.log(updatedObj)
+    // console.log(updatedObj)
     const userUpd = await this.userModel.getWithAllAssociationsByUsername(updatedObj.username)
     // const result = await SequelizeImageBlobModel.findAll({
     //   where:{
@@ -87,12 +87,12 @@ export default class UserService extends BaseService<TUser> implements IUserServ
       // else if(!userLikedUsers?.some((e)=> e === userTargetId)){
       //   await SequelizeLikeModel.create({userLoggedId, userTargetId});
       // }  
-      console.log(loggedUser)
-      console.log('------------------------------')
-      console.log(targetUser)
+      // console.log(loggedUser)
+      // console.log('------------------------------')
+      // console.log(targetUser)
       const user = await this.userModel.getWithAllAssociationsByUsername(loggedUser?.username);
-      console.log('_______________')
-      console.log(user)
+      // console.log('_______________')
+      // console.log(user)
       return {user, isMatch} ;
     }
    

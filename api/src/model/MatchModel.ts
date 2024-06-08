@@ -6,6 +6,7 @@ import { IMatchModel } from '../interface/IMatchModel';
 import { Op } from 'sequelize';
 import AppResponseError from '../AppResponseError';
 import SequelizeUserModel from '../database/models/SequelizeUserModel';
+import SequelizeNewMatchModel from '../database/models/SequelizeNewMatchModel';
   
 export default class MatchModel extends BaseModel<TMatch> implements IMatchModel{
   constructor(
@@ -17,11 +18,11 @@ export default class MatchModel extends BaseModel<TMatch> implements IMatchModel
         [Op.or]:{
           ['firstUserId']:id,
           ['lastUserId']:id,
-        }
+        } 
       },
       include:[
         { model: SequelizeUserModel, as: 'FirstUser'},
-        { model: SequelizeUserModel, as: 'LastUser'}
+        { model: SequelizeUserModel, as: 'LastUser'},
       ],
       attributes:['firstUserId','lastUserId'],
     });

@@ -7,20 +7,18 @@ import { ParsedQs } from 'qs';
 import AppResponseError from '../AppResponseError';
 import { IUserService } from '../interface/IUserService';
 import { IMatchService } from '../interface/IMatchService';
+import { INewMatchService } from '../interface/INewMatchService';
 
 export default class UserController extends BaseController<TUser> implements ISearchAbleByName{
   constructor(
     private userService: IUserService,
     private matchService: IMatchService,
+    private newMatchService: INewMatchService,
   ) { super(userService); }
 
   public async login(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>, next:NextFunction){
     const {username, password} = req.body;
-    console.log('login user controller')
-    console.log(username, password)
     const loggedUser = await this.userService.login(username, password);
-    // res.setHeader('Content-Type', 'image/png'); // Ajuste o tipo de conteúdo conforme necessário
-    console.log(loggedUser)
     return res.status(200).json(loggedUser);
   }
 
@@ -34,15 +32,39 @@ export default class UserController extends BaseController<TUser> implements ISe
     const username = req.headers['username'] as string;
     const users =  await this.userService.findPotentialMatches(username);
     return res.status(200).json(users); 
-  } 
+  }  
 
   public async findAllMatchesById(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>): Promise<Response<any, Record<string, any>>>{
     const id = req.headers['id'] as string;
-    console.clear()
+    // console.clear()
     console.log('allMatchesbyid: ',id)
     // const matchA = await this.matchService.findAllLikeByFieldName('firstUserId',id);
     // const matchB = await this.matchService.findAllLikeByFieldName('lastUserId',id);
     const matchC = await this.matchService.findAllMatchesById(Number(id));
+    const newMatchUsers = await this.newMatchService.findAllLikeByFieldName('userId',id);
+    console.log(newMatchUsers);
+    console.log(matchC)
+    
+    if(newMatchUsers.length > 0){
+     const a = newMatchUsers.map(async (n)=>{
+        const loggedSocket = req.connectedUsers[id]; 
+        const newMatchUser = matchC.find((m)=>m.id === n.targetId);
+      console.log(newMatchUser)
+        if (loggedSocket) {  
+          await this.newMatchService.delete(id);
+          setTimeout(()=>{ 
+            req.io.to(loggedSocket).emit('match', JSON.stringify( {
+              id:newMatchUser?.id,
+              // name:newMatchUser?.name,
+              // resume:newMatchUser?.resume
+            }));
+          },1000);
+        }
+
+      });
+      
+
+    }
     // console.log(matchA)
     // console.log(matchB)
     // console.log(matchC)
@@ -70,9 +92,13 @@ export default class UserController extends BaseController<TUser> implements ISe
       
         if (loggedSocket) {  
           req.io.to(loggedSocket).emit('match', JSON.stringify( data.isMatch));
+        }else {
+          await this.newMatchService.create({userId:idLoggedNumber,targetId:idTargetNumber});
         }
         if (targetSocket){
           req.io.to(targetSocket).emit('match', JSON.stringify(data.user))
+        }else{
+          await this.newMatchService.create({userId:idTargetNumber,targetId:idLoggedNumber});
         }
       
  

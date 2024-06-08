@@ -10,6 +10,7 @@ import UserLikeToUser from './UserLikeToUser';
 import UserDislikeToUser from './UserDislikeToUser';
 import SequelizeImageBlobModel from './SequelizeImageBlobModel';
 import SequelizeMatchModel from './SequelizeMatchModel';
+import SequelizeNewMatchModel from './SequelizeNewMatchModel';
   
   class SequelizeUserModel extends Model<InferAttributes<SequelizeUserModel>,
   InferCreationAttributes<SequelizeUserModel>> {
@@ -40,6 +41,13 @@ import SequelizeMatchModel from './SequelizeMatchModel';
     modelName: 'users',
     timestamps: false,
     underscored: true,
+  });
+
+  SequelizeUserModel.belongsToMany(SequelizeUserModel, {
+    through:{ model: SequelizeNewMatchModel}, // Nome da tabela intermediária
+    as: 'newMatchUsers',
+    foreignKey: 'user_id',
+    otherKey: 'target_id',
   });
   
   SequelizeUserModel.belongsToMany(SequelizeUserModel, {
