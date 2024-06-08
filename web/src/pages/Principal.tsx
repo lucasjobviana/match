@@ -5,7 +5,6 @@ import { getAllUsers } from '../services/api/users';
 import logo from '../../src/assets/logo3.png';
 import like from '../../src/assets/like.svg';
 import dislike from '../../src/assets/dislike.svg';
-import itsmatch from '../../src/assets/itsamatch.png';
 import { TUser } from '../Type';
 import LikedContainer from './LikedContainer';
 import { useLoginContext } from '../context/LoginContext';
@@ -17,8 +16,7 @@ import { MatchProvider } from '../context/MatchContext';
 
 export default function Principal() {
   const [potentialUsers, setPotentialUsers] = useState<TUser[]>([]);
-  const [matchDev, setMatchDev] = useState<TUser | null>(null);
-  // const [newMatchId, setNewMatchId] = useState<number| null>(null);
+  const [newMatches, setNewMatches] = useState<TUser[]>([]);
   const { user, setUser, like_to, dislike_to } = useLoginContext();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
@@ -34,39 +32,19 @@ export default function Principal() {
       }
     }
     loadUsers();
-  }, [user]);//ok
+  }, [user]);
 
-  useEffect(() => {//&& potentialUsers.length > 0
+  useEffect(() => {
     if (user) {
-      const socket = io('http://192.168.200.110:3001', {
-        query: { user: user.id },
-      });
+      const socket = io('http://192.168.200.110:3001', { query: { user: user.id } });
 
       socket.on('match', (dev) => {
-        // setMatchDev(dev);
-        console.log('setando o id do dev no match event')
-        console.log(dev)
-        setMatchDev(JSON.parse(dev));
-        // const newMatchUser = potentialUsers.find((u) => u.id === dev) || user.relatedUsers?.find(u => u.id = dev);
-        // if (newMatchUser) {
-        //   setMatchDev(newMatchUser || null);
-        // }
+        setNewMatches((prevMatchDev) => [...prevMatchDev, JSON.parse(dev)]);
       });
 
       return () => socket.disconnect();
     }
-  }, [user]);//potentialUsers
-
-  // useEffect(()=>{
-  //   if(user && newMatchId){
-  //     const newMatch = user.relatedUsers?.find((u)=>u.id === newMatchId);
-  //     console.log('setando o matchdev ', newMatchId)
-  //     console.log(newMatch)
-  //     console.log(user)
-  //     setMatchDev(newMatch||null)
-  //     // setMatchDev(user.likeTo?.find((u)=>u.id === newMatchId))
-  //   }else{console.log('else no user,newMatchId')}
-  // }, [user, newMatchId]);
+  }, [user]);
 
   async function handleLike(targetId) {
     await like_to(user.id, targetId);
@@ -100,32 +78,13 @@ export default function Principal() {
     navigate('/');
   };
 
-  const handleClickMatchSpan = (matchDev) => {
-    console.log(matchDev)
-    console.log(user)
-    // const matches = user?.matchedUsers;
-    // const newUser = user;
-    // // newUser && newUser.matchedUsers && newUser?.matchedUsers.push(matchDev);
-    // console.log(newUser?.matchedUsers)
-    // console.log(newUser?.matchedUsers?.find((u)=>u.id === matchDev.id));
-    // if(!newUser?.matchedUsers?.find((u)=>u.id === matchDev.id)){
-    //   // setUser(newUser)
-    // }
-    setMatchDev(null);
-  }
   const currentUser = potentialUsers[currentIndex];
 
   return (
     <>
       <div id="logged-user-detail-container">
-        <button type="button" onClick={() => navigate(`/user/${user.id}/profile`)}>
-          Editar Perfil
-        </button>
-
-        <button type="button" onClick={() => handleLogout()}>
-          Logout
-        </button>
-
+        <button type="button" onClick={() => navigate(`/user/${user.id}/profile`)}>Editar Perfil</button>
+        <button type="button" onClick={() => handleLogout()}>Logout</button>
         <LoggedUserDetailContainer />
       </div>
       <div id="container-wrapper">
@@ -167,25 +126,13 @@ export default function Principal() {
           ) : (
             <div className="empty">Nenhum usuário encontrado...</div>
           )}
-          
-           {matchDev && (//matchDev.imageUrls && (
-            <div className="match-container">
-              <img src={itsmatch} alt="It's a match" />
-              {/* <img className="avatar" src={matchDev.imageUrls[0]} alt="Dev avatar" /> */}
-              <strong>{matchDev.name}</strong>
-              <p>{matchDev.resume}</p>
-              <button type="button" onClick={() => handleClickMatchSpan(matchDev)}>FECHAR</button>
-            </div>
-          )} 
-          
         </div>
         <MatchProvider>
           <div id="side-container-right">
-            <MatchContainer isNewMatch={matchDev} />
+            <MatchContainer newMatches={newMatches} setMatchDev={setNewMatches} />
           </div>
         </MatchProvider>
       </div>
     </>
   );
 }
-//{matchDev?.imageUrls?[0]}
