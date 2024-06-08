@@ -1,0 +1,34 @@
+// {
+//   "compilerOptions": {
+//     "target": "es2019",
+//     "module": "commonjs",
+//     "sourceMap": true,                     
+//     "outDir": "./build",
+//     "rootDir": "./src",
+//     "strict": false,
+//     "moduleResolution": "node",
+//     "baseUrl": ".", 
+//     "forceConsistentCasingInFileNames": true,
+//     "resolveJsonModule": true,
+//     "experimentalDecorators": true,
+//     "emitDecoratorMetadata": true,
+//     "skipLibCheck": true,
+//     "paths": {
+//       "*": ["node_modules/*"]
+//     }
+//   },
+//   "include": ["src/**/*", "src/database/.seeders"],
+//   "exclude": ["src/tests"]
+// }
+{
+    "compilerOptions": {
+      "target": "es2019",  
+      "module": "commonjs",
+      "rootDir": "./src",
+      "outDir": "./dist",       
+      "esModuleInterop": true,                    
+      "forceConsistentCasingInFileNames": true,
+      "strict": true,            
+      "skipLibCheck": true
+    }
+  }
