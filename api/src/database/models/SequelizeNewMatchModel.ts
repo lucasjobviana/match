@@ -30,13 +30,9 @@ class SequelizeNewMatchModel extends Model<InferAttributes<SequelizeNewMatchMode
   }, {
     sequelize: db,
     modelName: 'SequelizeNewMatchModel',
-    tableName: 'new_matchs', // especificar o nome da tabela
+    tableName: 'new_matchs',  
     timestamps: false,
-    underscored: true,
-     
+    underscored: true,  
   });
     
- 
-  
-  export default SequelizeNewMatchModel;
-  
+export default SequelizeNewMatchModel;  

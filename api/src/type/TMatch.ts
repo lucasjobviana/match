@@ -9,5 +9,4 @@ export type TMatch = {
 export type TNewMatch = {
   userId: number,
   targetId?: number,
-  // matchedUser: TUser
 };

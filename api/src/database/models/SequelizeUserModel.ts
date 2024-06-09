@@ -12,7 +12,7 @@ import SequelizeImageBlobModel from './SequelizeImageBlobModel';
 import SequelizeMatchModel from './SequelizeMatchModel';
 import SequelizeNewMatchModel from './SequelizeNewMatchModel';
   
-  class SequelizeUserModel extends Model<InferAttributes<SequelizeUserModel>,
+class SequelizeUserModel extends Model<InferAttributes<SequelizeUserModel>,
   InferCreationAttributes<SequelizeUserModel>> {
     declare id: CreationOptional<number>;
     declare name: string;
@@ -20,7 +20,6 @@ import SequelizeNewMatchModel from './SequelizeNewMatchModel';
     declare username: string;
     declare password: string;
     declare resume: string;
-    // declare image: Blob;
   }
   
   SequelizeUserModel.init({
@@ -35,7 +34,6 @@ import SequelizeNewMatchModel from './SequelizeNewMatchModel';
     username: { type: DataTypes.STRING, allowNull: false },
     password: { type: DataTypes.STRING, allowNull: false },
     resume: { type: DataTypes.STRING, allowNull:true}
-    // image: {type: DataTypes.BLOB, allowNull: true}
   }, {
     sequelize: db,
     modelName: 'users',
@@ -44,41 +42,35 @@ import SequelizeNewMatchModel from './SequelizeNewMatchModel';
   });
 
   SequelizeUserModel.belongsToMany(SequelizeUserModel, {
-    through:{ model: SequelizeNewMatchModel}, // Nome da tabela intermediária
+    through:{ model: SequelizeNewMatchModel}, 
     as: 'newMatchUsers',
     foreignKey: 'user_id',
     otherKey: 'target_id',
   });
   
   SequelizeUserModel.belongsToMany(SequelizeUserModel, {
-    through:{ model: UserLikeToUser}, // Nome da tabela intermediária
+    through:{ model: UserLikeToUser}, 
     as: 'relatedUsers',
     foreignKey: 'user_logged_id',
     otherKey: 'user_target_id',
   });
   
   SequelizeUserModel.belongsToMany(SequelizeUserModel, {
-    through:{ model: UserDislikeToUser}, // Nome da tabela intermediária
+    through:{ model: UserDislikeToUser},
     as: 'dislikeUsers',
     foreignKey: 'user_logged_id',
     otherKey: 'user_target_id',
   });
 
-  // SequelizeUserModel.belongsToMany(SequelizeUserModel, {
-  //   through:{ model: SequelizeMatchModel}, // Nome da tabela intermediária
-  //   as: 'matchedUsers',
-  //   foreignKey: 'first_user_id',
-  //   otherKey: 'last_user_id',
-  // });
   SequelizeUserModel.belongsToMany(SequelizeUserModel, {
-    through: { model: SequelizeMatchModel }, // Nome da tabela intermediária
+    through: { model: SequelizeMatchModel }, 
     as: 'matchedUsersAsFirstUser',
     foreignKey: 'first_user_id',
     otherKey: 'last_user_id',
   });
   
   SequelizeUserModel.belongsToMany(SequelizeUserModel, {
-    through: { model: SequelizeMatchModel }, // Nome da tabela intermediária
+    through: { model: SequelizeMatchModel }, 
     as: 'matchedUsersAsLastUser',
     foreignKey: 'last_user_id',
     otherKey: 'first_user_id',
@@ -102,5 +94,4 @@ import SequelizeNewMatchModel from './SequelizeNewMatchModel';
       as: 'user',
   });
 
-  
-  export default SequelizeUserModel;
+export default SequelizeUserModel;

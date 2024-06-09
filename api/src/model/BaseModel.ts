@@ -40,10 +40,8 @@ export default class  BaseModel<T> implements IBaseModel<T> {
   }
 
   public async update(id:string, obj:T): Promise<T> {
-    console.log('update base model: ',id)
-    console.log(obj)
     const updatedObj = await this.model.update(obj, {where: {id}});
-    console.log(updatedObj)
+ 
     if(updatedObj[0] === 0) {
       throw new Error(`${this.model} not foundable`);
     }
