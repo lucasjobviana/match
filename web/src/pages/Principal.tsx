@@ -40,6 +40,7 @@ export default function Principal() {
 
       socket.on('match', (dev) => {
         console.log(dev)
+        alert(dev.id)
         setNewMatches((prevMatchDev) => [...prevMatchDev, JSON.parse(dev)]);
       });
 

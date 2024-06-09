@@ -6,8 +6,6 @@ import cors from 'cors';
 import userRouter from './route/user.routes';
 import loginRouter from './route/login.routes';
 import AppResponseError from './AppResponseError';
-import SequelizeImageBlobModel from './database/models/SequelizeImageBlobModel';
-import SequelizeUserModel from './database/models/SequelizeUserModel';
 
 class App {
   public app: express.Express;
@@ -20,56 +18,25 @@ class App {
     this.server = createServer(this.app);
     this.io = new SocketIOServer(this.server, {
       cors: {
-        origin: "*", // Ajuste conforme necessário
+        origin: "*", 
         methods: ["GET", "POST"], 
       }
     });   
 
-this.app.get('/images/:id', async (req: Request, res: Response) => {
-  console.log('_______________------------------_______________-------')
-  try {
-      const image = await SequelizeImageBlobModel.findByPk(req.params.id);
-      if (!image) {
-          return res.status(404).send('Image not found.');
-      }
-
-      res.setHeader('Content-Type', 'image/png'); // Ajuste o tipo de conteúdo conforme necessário
-      res.send(image.fileData);
-  } catch (error) {
-      res.status(500).send(error.message);
-  }
-});
-
-    this.app.use((request, response, next) => {
+    this.app.use((request, _res, next) => {
     request.io = this.io;
     request.connectedUsers = this.connectedUsers;
-  
-    // Segue o fluxo das rotas normalmente
     return next();
-  });
+    });
+
     this.app.use(cors());
-    this.app.get('/user/:id', async (req: Request, res:Response) =>{
-      const idTargetUser = req.params.id;
-      const user = await SequelizeUserModel.findOne({where:{id:idTargetUser},
-      include:{
-        model: SequelizeImageBlobModel,
-        as:'images',
-      }});
-      console.log(user)
-      return res.status(200).json(user);
-    
-    })
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(express.json());
-    // this.app.use(this.io);
-
     this.routes();
     this.config();
 
     // Inicializa o Socket.IO após configurar as rotas e middlewares
     this.initializeSocket();
-
-    // Não remover essa rota
     this.app.get('/', (_req, res) => res.json({ ok: 'Hello World!!' }));
 
     this.app.use((err: AppResponseError | Error, _req: Request, res: Response, _n: NextFunction) => {

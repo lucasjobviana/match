@@ -1,7 +1,6 @@
 import BaseService from './BaseService';
-import { TImageBlob, TMatch, TUser } from '../interface';
+import { TMatch, TUser } from '../interface';
 import BaseModel from '../model/BaseModel';
-import { IImageService } from '../interface/IImageService';
 import SequelizeImageBlobModel from '../database/models/SequelizeImageBlobModel';
 import { IMatchService } from '../interface/IMatchService';
 import { IMatchModel } from '../interface/IMatchModel';
@@ -15,27 +14,18 @@ export default class MatchService extends BaseService<TMatch> implements IMatchS
 
   public async findAllMatchesById(id: number): Promise<TUser[]> {
     const targetMatches = await this.matchModel.findAllMatchesById(id);
-    if(!targetMatches) throw new AppResponseError('não tem mathces')
-      const promises = targetMatches.map(async (target) => {
-        const images = await SequelizeImageBlobModel.findAll({ where: { userId: target.matchedUser?.id } });
-        // console.log(images)
-        const imagesFile = images.map((i)=>i.dataValues);
-        // console.log(imagesFile)
-        return { 
-          
-          images:imagesFile  || [],
-          id:target.matchedUser?.id,
-          name: target.matchedUser?.name,
-          username: target.matchedUser?.username,
-          password: '',
-          phone: target.matchedUser?.phone,
-          resume: target.matchedUser.resume
-          // matchedUser: {
-          //   ...target.matchedUser,
-          //   images
-          // }
-        };
-      });
+   
+    if(!targetMatches) throw new AppResponseError(`Usuário ${id} não tem matchs`)
+
+    const promises = targetMatches.map(async (target) => {
+      const images = await SequelizeImageBlobModel.findAll({ where: { userId: target.matchedUser?.id } });
+      const imagesFile = images.map((i)=>i.dataValues);
+
+      return {      
+        images:imagesFile  || [],
+        ...target.matchedUser.dataValues
+      };
+    });
     
       return await Promise.all(promises);
   }

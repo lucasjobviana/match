@@ -1,5 +1,4 @@
 import { DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize";
-import SequelizeUserModel from "./SequelizeUserModel";
 import db from '.';
 
 class UserDislikeToUser extends Model<InferAttributes<UserDislikeToUser>, InferCreationAttributes<UserDislikeToUser>> {
@@ -31,10 +30,9 @@ class UserDislikeToUser extends Model<InferAttributes<UserDislikeToUser>, InferC
   }, {
     sequelize: db,
     modelName: 'UserDislikeToUser',
-    tableName: 'user_dislike_to', // especificar o nome da tabela
+    tableName: 'user_dislike_to',  
     timestamps: false,
     underscored: true,
   });
   
-  export default UserDislikeToUser;
-  
+export default UserDislikeToUser;

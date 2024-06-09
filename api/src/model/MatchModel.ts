@@ -1,12 +1,10 @@
 import BaseModel from './BaseModel';
-import { TImageBlob, TMatch, TUser } from '../interface';
-import SequelizeImageBlobModel from '../database/models/SequelizeImageBlobModel';
+import { TMatch } from '../interface';
 import SequelizeMatchModel from '../database/models/SequelizeMatchModel';
 import { IMatchModel } from '../interface/IMatchModel';
 import { Op } from 'sequelize';
 import AppResponseError from '../AppResponseError';
 import SequelizeUserModel from '../database/models/SequelizeUserModel';
-import SequelizeNewMatchModel from '../database/models/SequelizeNewMatchModel';
   
 export default class MatchModel extends BaseModel<TMatch> implements IMatchModel{
   constructor(
@@ -27,27 +25,12 @@ export default class MatchModel extends BaseModel<TMatch> implements IMatchModel
       attributes:['firstUserId','lastUserId'],
     });
 
-    const filteredMatches = matchs.map(match => {
-      if (match.firstUserId === id) {
-        return {
-          // ...match.toJSON(),
-          // firstUserId: match.firstUserId,
-          // lastUserId: match.lastUserId,
-          matchedUser: match.LastUser
-        };
-      } else {
-        return {
-          // ...match.toJSON(),
-          // firstUserId: match.firstUserId,
-          // lastUserId: match.lastUserId,
-          matchedUser: match.FirstUser
-        };
-      }
-    }).filter(match => match.matchedUser.id !== id);
+    const filteredMatches = matchs.map(match => match.firstUserId === id ? 
+      {matchedUser:match.LastUser} :  
+      {matchedUser:match.FirstUser}
+    ).filter(match => match.matchedUser.id !== id);
   
-     
-
     if(matchs) return filteredMatches;
-    throw new AppResponseError('não achei os matchs do usuário '+id)
+    throw new AppResponseError(`Matchs do usuário ${id} não encontrados`)
   }
 } 

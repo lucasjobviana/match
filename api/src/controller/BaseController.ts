@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-
 import BaseService from '../service/BaseService';
 import { IBaseController } from '../interface/IBaseController';
 

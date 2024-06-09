@@ -30,13 +30,10 @@ class SequelizeMatchModel extends Model<InferAttributes<SequelizeMatchModel>, In
   }, {
     sequelize: db,
     modelName: 'SequelizeMatchModel',
-    tableName: 'matchs', // especificar o nome da tabela
+    tableName: 'matchs', 
     timestamps: false,
     underscored: true,
      
   });
     
- 
-  
-  export default SequelizeMatchModel;
-  
+export default SequelizeMatchModel;
