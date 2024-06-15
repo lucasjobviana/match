@@ -2,10 +2,17 @@ import { useEffect, useState, ChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useLoginContext } from '../context/LoginContext';
 import './Profile.css';
-// import { api } from '../services/api';
 import './ImageUpload.css';
 
 function Profile() {
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/');
+      return;
+    }
+  });
+
   const maxUploads = 6;
   const { id } = useParams(); 
   const navigate = useNavigate();

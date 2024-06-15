@@ -1,51 +1,37 @@
 import { useEffect, useState } from 'react';
-import io from 'socket.io-client';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAllUsers } from '../services/api/users';
 import logo from '../../src/assets/logo3.png';
 import like from '../../src/assets/like.svg';
 import dislike from '../../src/assets/dislike.svg';
 import { TUser } from '../Type';
-import LikedContainer from './LikedContainer';
 import { useLoginContext } from '../context/LoginContext';
 import LoggedUserDetailContainer from './LoggedUserDetailContainer';
-import UnlikedContainer from './UnlikedContainer';
-import './Principal.css';
-import MatchContainer from './MatchContainer';
-import { MatchProvider } from '../context/MatchContext';
 
 export default function Principal() {
   const [potentialUsers, setPotentialUsers] = useState<TUser[]>([]);
-  const [newMatches, setNewMatches] = useState<TUser[]>([]);
   const { user, setUser, like_to, dislike_to } = useLoginContext();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/');
+      return;
+    }
+  });
 
   useEffect(() => {
     async function loadUsers() {
       if (user) {
-        const u = await getAllUsers(user.username);
+        const u = await getAllUsers(user.username, user.id);
         setPotentialUsers(u);
         setCurrentIndex(0);
         setCurrentPhotoIndex(0);
       }
     }
     loadUsers();
-  }, [user]);
-
-  useEffect(() => {
-    if (user) {
-      const socket = io('http://192.168.200.110:3001', { query: { user: user.id } });
-
-      socket.on('match', (dev) => {
-        console.log(dev)
-        alert(dev.id)
-        setNewMatches((prevMatchDev) => [...prevMatchDev, JSON.parse(dev)]);
-      });
-
-      return () => socket.disconnect();
-    }
   }, [user]);
 
   async function handleLike(targetId) {
@@ -129,11 +115,7 @@ export default function Principal() {
             <div className="empty">Nenhum usuário encontrado...</div>
           )}
         </div>
-        <MatchProvider>
-          <div id="side-container-right">
-            <MatchContainer newMatches={newMatches} setMatchDev={setNewMatches} />
-          </div>
-        </MatchProvider>
+        <button onClick={()=>navigate(`/user/${user.id}/matches`)}  >matches</button>
       </div>
     </>
   );

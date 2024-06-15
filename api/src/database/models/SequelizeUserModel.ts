@@ -14,7 +14,7 @@ import SequelizeNewMatchModel from './SequelizeNewMatchModel';
   
 class SequelizeUserModel extends Model<InferAttributes<SequelizeUserModel>,
   InferCreationAttributes<SequelizeUserModel>> {
-    declare id: CreationOptional<number>;
+    declare id: CreationOptional<number>; 
     declare name: string;
     declare phone: string;
     declare username: string;

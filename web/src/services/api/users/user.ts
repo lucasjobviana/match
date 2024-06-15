@@ -27,10 +27,11 @@ if(loggedUser) return loggedUser.data;
 return null;
 }
 
-export const getAllUsers = async (username:string | undefined) => {
+export const getAllUsers = async (username:string | undefined, id:number) => {
   const users = await api.get('/users', {
     headers: {
       username: username,
+      id,
     }
   }).then((response: { data: TUser[]; }) => {
     return response.data;

@@ -27,7 +27,7 @@ export default class UserController extends BaseController<TUser> implements ISe
     const loggedUser = await this.userService.register(username, password);
     return res.status(200).json(loggedUser);
   } 
- 
+  
   public async findPotentialMatches(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>): Promise<Response<any, Record<string, any>>> {
     const username = req.headers['username'] as string;
     const users =  await this.userService.findPotentialMatches(username);
@@ -37,24 +37,25 @@ export default class UserController extends BaseController<TUser> implements ISe
   public async findAllMatchesById(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>): Promise<Response<any, Record<string, any>>>{
     const id = req.headers['id'] as string;
     const userMatches = await this.matchService.findAllMatchesById(Number(id));
-    const newMatchUsers = await this.newMatchService.findAllLikeByFieldName('userId',id);
+    // const newMatchUsers = await this.newMatchService.findAllLikeByFieldName('userId',id);
      
-    if(newMatchUsers.length > 0){
-     newMatchUsers.map(async (user)=>{
-        const loggedSocket = req.connectedUsers[id]; 
-        const newMatchUser = userMatches.find((m)=>m.id === user.targetId);
+    // if(newMatchUsers.length > 0){
+    //  newMatchUsers.map(async (user)=>{
+    //     const loggedSocket = req.connectedUsers[id]; 
+    //     const newMatchUser = userMatches.find((m)=>m.id === user.targetId);
 
-        if (loggedSocket) {  
-          await this.newMatchService.delete(id);
-          setTimeout(()=>{ 
-            req.io.to(loggedSocket).emit('match', JSON.stringify( {
-              id:newMatchUser?.id,
-            }));
-          },2000);
-        }
-      });
-    }
-
+    //     if (loggedSocket) {  
+    //       await this.newMatchService.delete(id);
+    //       setTimeout(()=>{ 
+    //         req.io.to(loggedSocket).emit('match', JSON.stringify( {
+    //           id:newMatchUser?.id,
+    //         }));
+    //       },2000);
+    //     }
+    //   });
+    // }
+    console.log('controler           -----------')
+    console.log(userMatches)
     return  res.status(200).json(userMatches);
   }
 
@@ -72,10 +73,10 @@ export default class UserController extends BaseController<TUser> implements ISe
       const loggedSocket = req.connectedUsers[idLoggedNumber];  
       const targetSocket = req.connectedUsers[idTargetNumber];
 
-      loggedSocket ? req.io.to(loggedSocket).emmit('match', JSON.stringify(data.isMatch))
+      loggedSocket ? req.io.to(loggedSocket).emit('match', JSON.stringify(data.isMatch))
       : await this.newMatchService.create({userId:idLoggedNumber,targetId:idTargetNumber});
 
-      targetSocket ? req.io.to(targetSocket).emmit('match', JSON.stringify(data.user))
+      targetSocket ? req.io.to(targetSocket).emit('match', JSON.stringify(data.user))
       : await this.newMatchService.create({userId:idTargetNumber, targetId:idLoggedNumber})
     }
 

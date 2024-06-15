@@ -11,9 +11,17 @@ export default class MatchService extends BaseService<TMatch> implements IMatchS
   constructor(
     private matchModel:BaseModel<TMatch> & IMatchModel,
   ) { super(matchModel); } 
-
+ 
   public async findAllMatchesById(id: number): Promise<TUser[]> {
+     
     const targetMatches = await this.matchModel.findAllMatchesById(id);
+    console.log('servico de verdade');
+    // const messages0 = targetMatches[0].messages.map((m)=>
+    //   m.dataValues
+    // );
+    console.log(targetMatches[0].messages)
+    console.log(targetMatches[0])
+    // console.log(messages0)
    
     if(!targetMatches) throw new AppResponseError(`Usuário ${id} não tem matchs`)
 
@@ -23,7 +31,8 @@ export default class MatchService extends BaseService<TMatch> implements IMatchS
 
       return {      
         images:imagesFile  || [],
-        ...target.matchedUser.dataValues
+        ...target.matchedUser,
+        messages:target.messages || [],
       };
     });
     

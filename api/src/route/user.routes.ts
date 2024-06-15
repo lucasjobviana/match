@@ -1,5 +1,8 @@
-import { Request, Router, Response } from 'express';
-import { imageController, userController } from '../config';
+import { Request, Router, Response, NextFunction } from 'express';
+import { imageController, userController, newMatchController } from '../config';
+import SequelizeMessageModel from '../database/models/SequelizeMessageModel';
+import { TMessage } from '../type';
+
 const multer = require('multer'); 
 
 const storage = multer.memoryStorage();
@@ -8,12 +11,26 @@ const router = Router();
 
 router.get( 
   '/',
+  (req: Request, res: Response, next:NextFunction) => (newMatchController.findNewMatchNotifications(req, res,next)),
   (req: Request, res: Response) => userController.findPotentialMatches(req, res),
 );
 
 router.get( 
   '/matchs',
   (req: Request, res: Response) => userController.findAllMatchesById(req, res),
+);
+
+
+router.post(
+  '/matchs/message',
+  async(req: Request, res: Response) => {
+    const {userId, matchId, content} = req.body;
+    console.log(req.body)
+    console.log(userId, matchId, content)
+    const a = await SequelizeMessageModel.create({sender:userId,content,match:matchId});
+    console.log(a)
+    return res.status(200).json(a);
+  },
 );
 
 router.post(

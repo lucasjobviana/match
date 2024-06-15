@@ -8,12 +8,14 @@ import MatchService from "./service/MatchService";
 import MatchModel from "./model/MatchModel";
 import NewMatchService from "./service/NewMatchService";
 import NewMatchModel from "./model/NewMatchModel";
+import NewMatchController from "./controller/NewMatchController";
 
 const matchModel = new MatchModel();
 const matchService = new MatchService(matchModel);
 
 const newMatchModel = new NewMatchModel();
 const newMatchService = new NewMatchService(newMatchModel);
+const newMatchController = new NewMatchController(newMatchService);
 
 const userModel = new UserModel(); 
 const userService = new UserService(userModel);
@@ -24,4 +26,4 @@ const imageService = new ImageService(imageModel);
 const imageController = new ImageController(imageService);
 
 
-export { userController, imageController }
+export { userController, imageController, newMatchController }

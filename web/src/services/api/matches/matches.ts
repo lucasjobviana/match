@@ -11,7 +11,15 @@ import { arrayBufferToBase64 } from '../../../util/util';
 //   }
 //   return window.btoa(binary);
 // };
-  
+
+export const sendMessageTo = async(userId:number, matchId:number, content:string) => {
+  const loggedUser = await api.post('/users/matchs/message',{
+    headers:{id:userId},
+    content,matchId, userId
+});
+if(loggedUser) return loggedUser.data;
+return null;
+}
 
 export const loadMatches = async (id:number) => {
   const matches = await api.get('/users/matchs', {
@@ -36,4 +44,4 @@ export const loadMatches = async (id:number) => {
   return allMatches;
   
   // return users.filter((user)=>user.id !== Number(id));
-}; 
+}; //sendMessageTo
