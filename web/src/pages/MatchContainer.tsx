@@ -94,7 +94,7 @@ import { useMatchContext } from '../context/MatchContext';
 import like from '../../src/assets/like.svg';
 import { useNavigate } from 'react-router-dom';
  
-export default function MatchContainer() {
+export default function MatchContainer() { 
   const { user } = useLoginContext();
   const { matches, load_matches, newMatches, sendMessage } = useMatchContext();
   const navigate = useNavigate();
