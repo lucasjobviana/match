@@ -45,7 +45,8 @@ export default class UserService extends BaseService<TUser> implements IUserServ
 
     if(!loggedUser) throw new AppResponseError('fds')
    
-    const result = await this.userModel.findPotentialMatches(loggedUser);
+    // const result = await this.userModel.findPotentialMatches(loggedUser);
+    const result = await this.userModel.findNextPotentialMatch(loggedUser);
 
     return result;
   }

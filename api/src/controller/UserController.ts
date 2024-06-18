@@ -30,8 +30,9 @@ export default class UserController extends BaseController<TUser> implements ISe
   
   public async findPotentialMatches(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>): Promise<Response<any, Record<string, any>>> {
     const username = req.headers['username'] as string;
-    const users =  await this.userService.findPotentialMatches(username);
-    return res.status(200).json(users); 
+    // const nextPotentialUser =  await this.userService.findPotentialMatches(username);
+    const nextPotentialUser = await this.userService.findPotentialMatches(username);
+    return res.status(200).json(nextPotentialUser); 
   }  
 
   public async findAllMatchesById(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>): Promise<Response<any, Record<string, any>>>{

@@ -15,6 +15,7 @@ export interface IUserService extends
   IUndislikeAbleToUser<TUser | null>,
   
   ILogin {
-    findPotentialMatches(username:string): Promise<TUser[]>,
+    findPotentialMatches(username:string): Promise<TUser>,
+    findNextPotentialMatch(username:string): Promise<TUser>,
     register(username: string, password:string) : Promise<TUser>;
 }

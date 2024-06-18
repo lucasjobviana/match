@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getAllUsers } from '../services/api/users';
+import { getAllUsers as getNextPotentialUser } from '../services/api/users';
 import logo from '../../src/assets/logo3.png';
 import like from '../../src/assets/like.svg';
 import dislike from '../../src/assets/dislike.svg';
@@ -9,9 +9,8 @@ import { useLoginContext } from '../context/LoginContext';
 import LoggedUserDetailContainer from './LoggedUserDetailContainer';
 
 export default function Principal() {
-  const [potentialUsers, setPotentialUsers] = useState<TUser[]>([]);
+  const [potentialMatchUser, setPotentialMatchUser] = useState<TUser|null>(null);
   const { user, setUser, like_to, dislike_to } = useLoginContext();
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const navigate = useNavigate(); 
 
@@ -25,30 +24,27 @@ export default function Principal() {
   useEffect(() => {
     async function loadUsers() {
       if (user) {
-        const u = await getAllUsers(user.username, user.id);
-        setPotentialUsers(u);
-        setCurrentIndex(0);
+        const u = await getNextPotentialUser(user.username, user.id);
+        setPotentialMatchUser(u);
         setCurrentPhotoIndex(0);
       }
     }
     loadUsers();
   }, [user]);
 
-  async function handleLike(targetId) {
+  async function handleLike(targetId:number) {
     await like_to(user.id, targetId);
-    setCurrentIndex(currentIndex + 1);
-    setCurrentPhotoIndex(0);
+    // setCurrentPhotoIndex(0);
   }
 
-  async function handleDislike(targetId) {
+  async function handleDislike(targetId:number) {
     await dislike_to(user.id, targetId);
-    setCurrentIndex(currentIndex + 1);
-    setCurrentPhotoIndex(0);
+    // setCurrentIndex(currentIndex + 1);
+    // setCurrentPhotoIndex(0);
   }
 
   function handlePhotoClick(event) {
-    const currentUser = potentialUsers[currentIndex];
-    const photoCount = currentUser.imageUrls.length;
+    const photoCount = potentialMatchUser?.imageUrls?.length || 0;
     const clickX = event.clientX;
     const imgElement = event.target;
     const imgRect = imgElement.getBoundingClientRect();
@@ -66,8 +62,6 @@ export default function Principal() {
     navigate('/');
   };
 
-  const currentUser = potentialUsers[currentIndex];
-
   return (
     <>
       <div id="logged-user-detail-container">
@@ -84,15 +78,15 @@ export default function Principal() {
           <Link to="/">
             <img src={logo} alt="Tinjob" className="logo" />
           </Link>
-          {potentialUsers.length > 0 && currentIndex < potentialUsers.length ? (
+          {potentialMatchUser ? (
             <ul>
-              <li key={currentUser.id}>
+              <li key={potentialMatchUser.id}>
                 <footer>
-                  <strong>{currentUser.name || currentUser.username}</strong>
-                  <p>{currentUser?.resume}</p>
-                  {currentUser.imageUrls && currentUser.imageUrls.length > 0 ? (
+                  <strong>{potentialMatchUser.name || potentialMatchUser.username}</strong>
+                  <p>{potentialMatchUser?.resume}</p>
+                  {potentialMatchUser.imageUrls && potentialMatchUser.imageUrls.length > 0 ? (
                     <img
-                      src={currentUser.imageUrls[currentPhotoIndex]}
+                      src={potentialMatchUser.imageUrls[currentPhotoIndex]}
                       alt={`Profile ${currentPhotoIndex}`}
                       className="profile-image"
                       onClick={handlePhotoClick}
@@ -102,10 +96,10 @@ export default function Principal() {
                   )}
                 </footer>
                 <div className="buttons">
-                  <button type="button" onClick={() => handleDislike(currentUser.id)}>
+                  <button type="button" onClick={() => handleDislike(potentialMatchUser.id)}>
                     <img src={dislike} alt="Dislike" />
                   </button>
-                  <button type="button" onClick={() => handleLike(currentUser.id)}>
+                  <button type="button" onClick={() => handleLike(potentialMatchUser.id)}>
                     <img src={like} alt="Like" />
                   </button>
                 </div>
@@ -115,7 +109,9 @@ export default function Principal() {
             <div className="empty">Nenhum usuário encontrado...</div>
           )}
         </div>
-        <button onClick={()=>navigate(`/user/${user.id}/matches`)}  >matches</button>
+       {user && (
+         <button onClick={()=>navigate(`/user/${user.id}/matches`)}  >matches</button>
+       )} 
       </div>
     </>
   );

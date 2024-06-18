@@ -116,6 +116,27 @@ export default class UserModel extends BaseModel<TUser> implements IFindAbleById
       
     });
   }
+ 
+  public async findNextPotentialMatch(user:TUser): Promise<TUser> {
+    const likkedUsers = user.relatedUsers?.map((u)=>u.id) ?? [];
+    const dislikkedUsers = user.dislikeUsers?.map((u)=>u.id) ?? [];
+    return await SequelizeUserModel.findOne({
+      where: {
+        [Op.and]:{
+          ['name']: {
+            [Op.like]: `%%`,
+          },
+          ['id']: {
+            [Op.notIn]: [...likkedUsers, ...dislikkedUsers, user.id]
+          },
+        } 
+      },include: [{
+         model: SequelizeImageBlobModel,
+         as:'images',
+       }]
+      
+    });
+  }
 
   public async getWithLikesImagesById(id: number) {
     

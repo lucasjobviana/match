@@ -15,7 +15,7 @@ import { arrayBufferToBase64 } from '../../../util/util';
 export const sendMessageTo = async(userId:number, matchId:number, content:string) => {
   const loggedUser = await api.post('/users/matchs/message',{
     headers:{id:userId},
-    content,matchId, userId
+    content,matchId, userId 
 });
 if(loggedUser) return loggedUser.data;
 return null;

@@ -14,8 +14,11 @@ import { arrayBufferToBase64 } from '../util/util';
 
 function App() {
   const { user } = useLoginContext();
-  const { setNewMatches, newMatches } = useMatchContext();
+  const { setNewMatches, newMatches, setMatches, matches } = useMatchContext();
   const [showMatch, setShowMatch] = useState(false);
+
+  // console.clear()
+  console.log(matches)
 
   useEffect(() => {
     console.log('effect2');console.log(newMatches, newMatches.length,user)
@@ -26,16 +29,32 @@ function App() {
 
     useEffect(() => {
     if (user) {
-      const socket = io('http://192.168.200.110:3001', { query: { user: user.id } });
+      const socket = io('http://172.17.0.1:3001/', { query: { user: user.id } });
+//
+
+      socket.on('newMessage', (message) => {
+        console.log('recebi uma nova mensagem  ')
+        const messageObject = JSON.parse(message);
+        console.log(messageObject)
+        const targetMatch = matches.find((m) =>m.matchId === messageObject.match);
+        console.log(matches)
+        console.log(matches[0].matchId)
+        console.log(messageObject.matchId)
+        console.log(matches.find((m)=>m.matchId === messageObject.matchId))
+        targetMatch.messages.unshift(messageObject);
+        console.log(targetMatch)
+        setMatches([targetMatch])
+        // setNewMatches((prevMatchDev) => [...prevMatchDev, JSON.parse(dev)]);
+      });
 
       socket.on('match', (dev) => {
         console.log('deu match do ',dev)
         setNewMatches((prevMatchDev) => [...prevMatchDev, JSON.parse(dev)]);
       });
 
-      return () => socket.disconnect();
+      // return () => socket.disconnect();
     }
-  }, [user]);
+  }, [user, matches]);
 
   const handleClickMatchSpan = (newUser: TUser) => {
     setShowMatch(false);

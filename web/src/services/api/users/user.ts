@@ -28,26 +28,23 @@ return null;
 }
 
 export const getAllUsers = async (username:string | undefined, id:number) => {
-  const users = await api.get('/users', {
+  const nextUser = await api.get('/users', {
     headers: {
       username: username,
       id,
     }
-  }).then((response: { data: TUser[]; }) => {
+  }).then((response: { data: TUser; }) => {
     return response.data;
   });
-
-  const allUsers = users;
-  allUsers.forEach((user)=>{
-    if(user && user.images[0]){
-      const urls = user.images.map((image: { fileData: ArrayBuffer; fileName: string }) => {
-        return `data:image/png;base64,${arrayBufferToBase64(image.fileData.data)}`;
-      });
-      user.imageUrls = urls;
-    } 
-  })
-
-  return allUsers;
+  console.log(nextUser)
+  if(nextUser && nextUser.images && nextUser.images[0]){
+    const urls = nextUser.images.map((image: { fileData: ArrayBuffer; fileName: string }) => {
+      return `data:image/png;base64,${arrayBufferToBase64(image.fileData.data)}`;
+    });
+    nextUser.imageUrls = urls;
+  }
+  console.log(nextUser)
+  return nextUser;
 }; 
 
 export const likeTo = async (idLoggedUser:number, idTargetUser:number) => {
