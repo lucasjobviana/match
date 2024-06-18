@@ -29,7 +29,7 @@ export const MatchProvider = ({children}) => {
     const sendMessage =  async(userId:number, matchId:number, content:string) => {
         const match = await sendMessageTo(userId, matchId, content);
         const targetMatch = matches.find((m)=>m.matchId === matchId  )
-        targetMatch.messages.unshift(match);
+        targetMatch.messages.push(match);
         // targetMatch.messages = [match, ...targetMatch.messages];
         console.log(matches)
         console.log(match)

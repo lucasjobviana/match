@@ -29,7 +29,7 @@ function App() {
 
     useEffect(() => {
     if (user) {
-      const socket = io('http://172.17.0.1:3001/', { query: { user: user.id } });
+      const socket = io('http://192.168.100.3:3001/', { query: { user: user.id } });
 //
 
       socket.on('newMessage', (message) => {
@@ -41,7 +41,7 @@ function App() {
         console.log(matches[0].matchId)
         console.log(messageObject.matchId)
         console.log(matches.find((m)=>m.matchId === messageObject.matchId))
-        targetMatch.messages.unshift(messageObject);
+        targetMatch.messages.push(messageObject);
         console.log(targetMatch)
         setMatches([targetMatch])
         // setNewMatches((prevMatchDev) => [...prevMatchDev, JSON.parse(dev)]);
@@ -52,7 +52,7 @@ function App() {
         setNewMatches((prevMatchDev) => [...prevMatchDev, JSON.parse(dev)]);
       });
 
-      // return () => socket.disconnect();
+      return () => socket.disconnect();
     }
   }, [user, matches]);
 
