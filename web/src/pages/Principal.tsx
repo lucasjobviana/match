@@ -64,6 +64,7 @@ export default function Principal() {
 
   return (
     <>
+     
       <div id="logged-user-detail-container">
         <button type="button" onClick={() => navigate(`/user/${user.id}/profile`)}>Editar Perfil</button>
         <button type="button" onClick={() => handleLogout()}>Logout</button>

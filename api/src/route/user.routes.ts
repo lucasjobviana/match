@@ -26,7 +26,7 @@ router.post(
   '/matchs/message',
   async(req: Request, res: Response) => {
     const {userId, matchId, content} = req.body;
-    console.log(req.body)
+    console.log(req.body) 
     console.log(userId, matchId, content)
     const a = await SequelizeMessageModel.create({sender:userId,content,match:matchId}); 
     console.log('message enviada por ',userId,' no match ',matchId)

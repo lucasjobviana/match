@@ -56,7 +56,7 @@ export default class UserController extends BaseController<TUser> implements ISe
     //   });
     // }
     console.log('controler           -----------')
-    console.log(userMatches)
+    console.log(userMatches[0].messages)
     return  res.status(200).json(userMatches);
   }
 

@@ -1,19 +1,25 @@
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Principal from './Principal'
-import Login from './Login';
-import Profile from './Profile';
-import MatchContainer from './MatchContainer';
-import { useMatchContext } from '../context/MatchContext';
+import { createContext, useContext, useEffect, useState } from "react";
+import { IReactRCProps } from "./IReactDom";
+import { useLoginContext } from "./LoginContext";
+import { useMatchContext } from "./MatchContext";
 import io from 'socket.io-client';
-import { useEffect, useState } from 'react';
-import { useLoginContext } from '../context/LoginContext';
-import itsmatch from '../../src/assets/itsamatch.png';
-import { TUser } from '../Type';
-import './Principal.css';
-import { arrayBufferToBase64 } from '../util/util';
+import itsmatch from '../assets/itsamatch.png';
+ 
+interface INotificationContext {
+    // matches: TUser[] | [];
+    // setMatches: (matches: TUser[] | []) => void;
+    // newMatches: TUser[] | [];
+    // setNewMatches: (matches: TUser[]| []) => void;
+    // load_matches: (userId:number) => {};//sendMessage(user.id, selectedMatch.id, messageContent);
+    // sendMessage: (userId:number, matchId:number, messageContent:string) => {}
+} 
 
-function App() {
-  const { user } = useLoginContext();
+interface INotificationProviderProps extends IReactRCProps {}
+
+const NotificationContext = createContext({} as INotificationContext);
+ 
+export const NotificationProvider = ({children}) => {
+    const { user } = useLoginContext();
   const { setNewMatches, newMatches, setMatches, matches } = useMatchContext();
   const [showMatch, setShowMatch] = useState(false);
 
@@ -31,11 +37,13 @@ function App() {
         const messageObject = JSON.parse(message);
         const targetMatchIndex = matches.findIndex((m) => m.matchId === messageObject.matchId);
         if (targetMatchIndex !== -1) {
-            const newMatches = [...matches];
-            const updatedMatch = { ...newMatches[targetMatchIndex] };
+            const newMatchs = [...matches];
+            const updatedMatch = { ...newMatchs[targetMatchIndex] };
             updatedMatch.messages = [...updatedMatch.messages, messageObject];
-            newMatches[targetMatchIndex] = updatedMatch;
-            setMatches(newMatches);
+            newMatchs[targetMatchIndex] = updatedMatch;
+            console.log('adicionando no newMessage')
+            console.log(newMatchs)
+            setMatches(newMatchs);
         } else {
             console.error('Match não encontrado');
         }
@@ -68,8 +76,8 @@ function App() {
     imageUrls: urls[0]
 
   }})
-  let span = null;
-  if(newMatches.length > 0){
+  let span = (<></>);
+  if(newMatches.length > 0){ 
     const firstTargetImage = target && target[0].imageUrls ? target[0].imageUrls:''; 
       span =  (<>
      {newMatches && newMatches.length > 0 && target && (
@@ -83,20 +91,15 @@ function App() {
     )} 
      </>)
   }
-  //return(<Principal>{span}</Principal>)
 
-  // return (<>
-  //   <Router>
-  //   <Routes>
-  //     <Route path="/" element={<Login />} />
-  //     <Route path="/user/:id" element={<Principal  />} />
-  //     <Route path="/user/:id/profile" element={<Profile  />} />
-  //     <Route path="/user/:id/matches" element={<MatchContainer  />} />
-  //     <Route path="*" element={<Navigate to="/" />} /> 
-  //   </Routes>
-  // </Router>
-  // </>
-  // )
+ 
+    return(
+        <NotificationContext.Provider value={{}}>
+            {span}
+            {children}
+        </NotificationContext.Provider>);
 }
 
-export default App
+export const useNotificationContext = () => {
+    return useContext(NotificationContext);
+}
