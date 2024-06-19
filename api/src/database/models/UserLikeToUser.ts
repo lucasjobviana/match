@@ -1,5 +1,4 @@
 import { DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize";
-import SequelizeUserModel from "./SequelizeUserModel";
 import db from '.';
 
 class UserLikeToUser extends Model<InferAttributes<UserLikeToUser>, InferCreationAttributes<UserLikeToUser>> {
@@ -31,10 +30,9 @@ class UserLikeToUser extends Model<InferAttributes<UserLikeToUser>, InferCreatio
   }, {
     sequelize: db,
     modelName: 'UserLikeToUser',
-    tableName: 'user_like_to', // especificar o nome da tabela
+    tableName: 'user_like_to', 
     timestamps: false,
     underscored: true,
   });
   
-  export default UserLikeToUser;
-  
+export default UserLikeToUser;

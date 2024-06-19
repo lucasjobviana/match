@@ -1,12 +1,19 @@
 import { Model, DataTypes, QueryInterface } from 'sequelize';
 
 type TAss = {
+  id: number;
   firstUserId: number;
   lastUserId: number;
 };
 
 const up = async (queryInterface: QueryInterface) => {
   await queryInterface.createTable<Model<TAss>>('matchs', {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     firstUserId: {
       type: DataTypes.INTEGER,
       allowNull: false,

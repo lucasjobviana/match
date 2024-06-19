@@ -1,5 +1,4 @@
 import { QueryInterface } from 'sequelize';
-import { password, username } from '../config/database';
 
 export default { 
   up: async (queryInterface: QueryInterface) => {
