@@ -3,6 +3,7 @@ import { TUser } from '../../../Type';
 import { arrayBufferToBase64 } from '../../../util/util';
 
 export const login = async (username:string, password:string) => {
+  console.log('ca')
   const loggedUser = await api.post('/login',{
       username,password
   });
@@ -139,6 +140,13 @@ export const updateUser = async (idLoggedUser:number, formData:FormData) => {
   }).then((response: { data: TUser[]; }) => {
     return response.data;
   });
+
+  // if(user && user.images[0]){
+  //   const urls = user.images.map((image: { fileData: ArrayBuffer; fileName: string }) => {
+  //     return `data:image/png;base64,${arrayBufferToBase64(image.fileData.data)}`;
+  //   });
+  //   user.imageUrls = urls;
+  // }
 
   const user = updatedUser;
     if(user && user.images[0]){

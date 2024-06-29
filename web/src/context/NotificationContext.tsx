@@ -5,6 +5,7 @@ import { useMatchContext } from "./MatchContext";
 import io from 'socket.io-client';
 import itsmatch from '../assets/itsamatch.png';
  
+ 
 interface INotificationContext {
     // matches: TUser[] | [];
     // setMatches: (matches: TUser[] | []) => void;
@@ -22,6 +23,7 @@ export const NotificationProvider = ({children}) => {
     const { user } = useLoginContext();
   const { setNewMatches, newMatches, setMatches, matches } = useMatchContext();
   const [showMatch, setShowMatch] = useState(false);
+  
 
   useEffect(() => {
     if (newMatches.length > 0) {
@@ -31,7 +33,7 @@ export const NotificationProvider = ({children}) => {
 
   useEffect(() => {
     if (user) {
-      const socket = io('http://192.168.100.3:3001/', { query: { user: user.id } });
+      const socket = io('http://182.30.0.11:3001/', { query: { user: user.id } });
 
       socket.on('newMessage', (message) => {
         const messageObject = JSON.parse(message);
@@ -92,11 +94,14 @@ export const NotificationProvider = ({children}) => {
      </>)
   }
 
+   
+
  
     return(
         <NotificationContext.Provider value={{}}>
             {span}
             {children}
+            
         </NotificationContext.Provider>);
 }
 

@@ -203,62 +203,64 @@ export default function MatchContainer() {
 
   return (
     <div className="matches-container">
-      <div className="matches-menu">
-        {matches.map((match) => (
-          <img
-            key={match.id}
-            src={match.imageUrls ? match.imageUrls[0] : ''}
-            alt={match.name || match.username}
-            onClick={() => handleMatchClick(match)}
-            className={selectedMatch && selectedMatch.id === match.id ? 'selected' : ''}
-          />
-        ))}
-      </div>
-
-      {selectedMatch ? (
-        <div className="match-details">
-          <div className="match-header">
-            <img src={selectedMatch.imageUrls ? selectedMatch.imageUrls[0] : ''} alt={selectedMatch.name || selectedMatch.username} />
-            <strong>{selectedMatch.name || selectedMatch.username}</strong>
-          </div> 
-
-          <div className="match-conversation">
-            {   
-              selectedMatch && selectedMatch.messages && 
-              selectedMatch.messages.map((u) => {
-                const alignment = u.sender === user.id ? 'right' : 'left';
-                return (
-                  <p key={u.id} style={{ textAlign: alignment }}>
-                    {u.content}
-                  </p>
-                );
-              })
-            }
-            <div ref={messagesEndRef} />
-          </div>
-
-          <div className="message-input-container">
-            <input 
-              type="text"
-              value={messageContent}
-              onChange={(e) => setMessageContent(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Digite sua mensagem..."
+      <div>
+        <div className="matches-menu">
+          {matches.map((match) => (
+            <img
+              key={match.id}
+              src={match.imageUrls ? match.imageUrls[0] : ''}
+              alt={match.name || match.username}
+              onClick={() => handleMatchClick(match)}
+              className={selectedMatch && selectedMatch.id === match.id ? 'selected' : ''}
             />
-            <button type="button" onClick={handleSendMessage}>
-              Enviar
-            </button>
-          </div>
-
-          <div className="buttons">
-            <button type="button" onClick={() => handleLike(selectedMatch.id)}>
-              <img src={like} alt="Like" />
-            </button>
-          </div>
+          ))}
         </div>
-      ) : (
-        <div className="empty">Selecione um usuário...</div>
-      )}
-    </div>
+
+        {selectedMatch ? (
+          <div className="match-details">
+            <div className="match-header">
+              <img src={selectedMatch.imageUrls ? selectedMatch.imageUrls[0] : ''} alt={selectedMatch.name || selectedMatch.username} />
+              <strong>{selectedMatch.name || selectedMatch.username}</strong>
+            </div> 
+
+            <div className="match-conversation">
+              {   
+                selectedMatch && selectedMatch.messages && 
+                selectedMatch.messages.map((u) => {
+                  const alignment = u.sender === user.id ? 'right' : 'left';
+                  return (
+                    <p key={u.id} style={{ textAlign: alignment }}>
+                      {u.content}
+                    </p>
+                  );
+                })
+              }
+              <div ref={messagesEndRef} />
+            </div>
+
+            <div className="message-input-container">
+              <input 
+                type="text"
+                value={messageContent}
+                onChange={(e) => setMessageContent(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Digite sua mensagem..."
+              />
+              <button type="button" onClick={handleSendMessage}>
+                Enviar
+              </button>
+            </div>
+
+            <div className="buttons">
+              <button type="button" onClick={() => handleLike(selectedMatch.id)}>
+                <img src={like} alt="Like" />
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="empty">Selecione um usuário...</div>
+        )}
+      </div>
+      </div>  
   );
 }

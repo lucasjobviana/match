@@ -12,7 +12,7 @@ function Profile() {
       return;
     }
   });
-
+  
   const maxUploads = 6;
   const { id } = useParams(); 
   const navigate = useNavigate();
@@ -35,13 +35,25 @@ function Profile() {
 
   function imageBlobToFile(imageBlob) {
     const { fileData, fileName } = imageBlob;
-    const blob = new Blob([fileData]);
-    const file = new File([blob], fileName);
+    const arrayBuffer = new Uint8Array(fileData.data).buffer;
+    const blob = new Blob([arrayBuffer], { type: 'image/jpeg' });
+    const file = new File([blob], fileName, { type: 'image/jpeg' });
+    // console.log(imageBlob)
+    // console.log(fileData)
+    // console.log(fileName)
+    // const blob = new Blob([fileData]);
+    // console.log(blob)
+    // const file = new File([blob], fileName);
+    // console.log(file)
     return file;
   }
 
   const initialFiles = user?.images ? initializeSelectedFiles(user.images, maxUploads):null;
   const [selectedFiles, setSelectedFiles] = useState<File[]|null>(initialFiles);
+  console.log(user?.images)
+  console.log(user?.imageUrls)
+  console.log(selectedFiles);
+  console.log(initialFiles)
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>, index: number) => {
     if (event.target.files) {
       const file = event.target.files[0];
@@ -66,7 +78,7 @@ function Profile() {
     const files =  validFiles();
     const formData = new FormData();
     files.forEach((file) => {
-      formData.append('files', file);
+      formData.append('files', file);////////////////////////
     });
 
     formData.append('name',e.target['name'].value)

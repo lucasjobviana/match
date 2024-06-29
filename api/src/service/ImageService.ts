@@ -14,13 +14,18 @@ export default class ImageService extends BaseService<TImageBlob> implements IIm
 
     await SequelizeImageBlobModel.destroy({where:{userId:id}})
   
-    const images = files.map((image) => ({
+    const images = files.map((image) => {
+      console.log(image.originalname)
+      console.log(image.buffer)
+      console.log(Number(id))
+      return {
       fileName:image.originalname,  
       fileData: image.buffer,
       userId: Number(id)
-    }))
+      };
+    })
 
-    await SequelizeImageBlobModel.bulkCreate(images)
+    await SequelizeImageBlobModel.bulkCreate(images) 
   }
  
 } 

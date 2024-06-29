@@ -16,7 +16,7 @@ interface IMatchProviderProps extends IReactRCProps {}
 
 const MatchContext = createContext({} as IMatchContext);
  
-export const MatchProvider = ({children}) => {
+export const MatchProvider = ({children}) => { 
     const [matches, setMatches] = useState<TUser[] |[]>([]);
     const [newMatches, setNewMatches] = useState<TUser[]>([]);
     
