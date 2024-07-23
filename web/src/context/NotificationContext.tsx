@@ -4,6 +4,7 @@ import { useLoginContext } from "./LoginContext";
 import { useMatchContext } from "./MatchContext";
 import io from 'socket.io-client';
 import itsmatch from '../assets/itsamatch.png';
+import { arrayBufferToBase64 } from "../util/util";
  
  
 interface INotificationContext {

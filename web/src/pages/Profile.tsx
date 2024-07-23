@@ -38,13 +38,6 @@ function Profile() {
     const arrayBuffer = new Uint8Array(fileData.data).buffer;
     const blob = new Blob([arrayBuffer], { type: 'image/jpeg' });
     const file = new File([blob], fileName, { type: 'image/jpeg' });
-    // console.log(imageBlob)
-    // console.log(fileData)
-    // console.log(fileName)
-    // const blob = new Blob([fileData]);
-    // console.log(blob)
-    // const file = new File([blob], fileName);
-    // console.log(file)
     return file;
   }
 
