@@ -1,225 +1,266 @@
-// import like from '../../src/assets/like.svg';
 // import { useEffect, useState } from 'react';
 // import { useLoginContext } from '../context/LoginContext';
 // import { useMatchContext } from '../context/MatchContext';
-// import itsmatch from '../../src/assets/itsamatch.png';
-// import { TUser } from '../Type';
-
-// interface MatchContainerProps {
-//   newMatches: TUser[];
-//   setMatchDev: React.Dispatch<React.SetStateAction<TUser[]>>;
-// }
+// import like from '../../src/assets/like.svg';
+// import { useNavigate } from 'react-router-dom';
  
-// export default function MatchContainer({ newMatches, setMatchDev }: MatchContainerProps) {
-//   const { user, unlike_to } = useLoginContext();
-//   const { matches, load_matches} = useMatchContext();
-//   const [showMatch, setShowMatch] = useState(false);
-
-//   useEffect(() => {  
-//     if(user){
-//       load_matches(user?.id);
-//     }
-//   }, [newMatches]);
+// export default function MatchContainer() { 
+//   const { user } = useLoginContext(); 
+//   const { matches, load_matches, sendMessage,newMatches } = useMatchContext();
+//   const navigate = useNavigate();
+//   const [selectedMatch, setSelectedMatch] = useState(null);
+//   const [messageContent, setMessageContent] = useState('');
 
 //   useEffect(() => {
-//     if (newMatches.length > 0) {
-//       setShowMatch(true);
-//       const timer = setTimeout(() => setShowMatch(false), 5000); // Hide after 5 seconds
-//       return () => clearTimeout(timer);
+//     console.log('______component did mount match conteiner')
+//     console.log(matches)
+//     if (matches && matches.length > 0) {
+//       setSelectedMatch(matches[0]); // Seleciona o primeiro match por padrão
 //     }
-//   }, [newMatches]);
+//   },[]);
 
-//   async function handleLike(id:number) {
-//      await unlike_to(user?.id,id);
-//   }
-
-//   const handleClickMatchSpan = (newUser:TUser) => {
-//     // setTimeout(()=>{
-//       setMatchDev((prevMatchDev) => prevMatchDev.filter((user) => user.id !== newUser.id));
-//       setShowMatch(false);
-//     // },1500);
-//   }
-
-//   const target = matches.length > 0 && newMatches.length > 0 ? matches.find(t=>t.id === newMatches[0].id) : null;
-//   const fistTargetImage = target && target.imageUrls ? target?.imageUrls[0] : '';
-
-//   return (
-//     <div className="matches-container">
-//     { 
-//       newMatches && newMatches.length > 0 && target && (
-//         <div className={`match-container ${showMatch ? 'show' : ''}`}>
-//            <img src={itsmatch} alt="It's a match" />
-//            <img className="avatar" src={fistTargetImage} alt="Dev avatar" />
-//            <strong>{target.name}</strong>
-//            <p>{target.resume}</p>
-//            <button type="button" onClick={() => handleClickMatchSpan(newMatches[0])}>FECHAR</button>
-//         </div>
-//       )
-//     } 
-    
-//     {
-//       user && matches && matches.length > 0 ? (
-//         <ul>
-//           {
-//           matches.map((u:TUser) => (
-//             <li key={u.id}>
-//               <footer>
-//                 <strong>{u.name || u.username}</strong>
-//               </footer>
-//               <div className="buttons">
-//                 <button type="button" onClick={() => handleLike(u.id)}>
-//                     <img src={like} alt="Like" /> 
-//                 </button>
-//               </div>
-//             </li>
-//           ))}
-//         </ul>
-//     ) : (
-//       <div className="empty">Nenhum usuário encontrado...</div>
-//     )}
-//     </div>
-//   );
-// }
-
-// import React, { useEffect, useState } from 'react';
-// import { useLoginContext } from '../context/LoginContext';
-// import { useMatchContext } from '../context/MatchContext';
-// import itsmatch from '../../src/assets/itsamatch.png';
-// import like from '../../src/assets/like.svg';
-// import { TUser } from '../Type';
-
-// export default function MatchContainer({ newMatches, setMatchDev }) {
-//   const { user, unlike_to } = useLoginContext();
-//   const { matches, load_matches } = useMatchContext();
-//   const [showMatch, setShowMatch] = useState(false);
-
+//   useEffect(() => {
+//     console.log('______component did update user, navigate')
+//     if (!user) {
+//       navigate('/');
+//       return;
+//     }
+//   }, [user, navigate]);
+   
 //   useEffect(() => {
 //     if (user) {
-//       load_matches(user.id);
-//     }
+//       console.log('______novo match na area vou atualizar os matches')
+//       console.log(selectedMatch)
+//       load_matches(user.id); 
+//     } 
 //   }, [newMatches]);
 
 //   useEffect(() => {
-//     if (newMatches.length > 0) {
-//       setShowMatch(true);
-//       const timer = setTimeout(() => setShowMatch(false), 5000); // Hide after 5 seconds
-//       return () => clearTimeout(timer);
-//     }
-//   }, [newMatches]);
+//     const matchUpdated = matches.find((a)=>a.id === selectedMatch?.id)
+//     setSelectedMatch(matchUpdated)
+//   }, [matches]);
 
-//   async function handleLike(id: number) {
-//     await unlike_to(user.id, id);
+//   async function handleLike(id) {
+//     console.log(matches);
+//     // await unlike_to(user.id, id);
 //   }
 
-//   const handleClickMatchSpan = (newUser: TUser) => {
-//     setMatchDev((prevMatchDev) => prevMatchDev.filter((user) => user.id !== newUser.id));
-//   };
+//   function handleMatchClick(matc) {
+//     setSelectedMatch(matc);
+//   }
 
-//   const target = matches.find(t => t.id === newMatches[0]?.id);
-//   const firstTargetImage = target && target.imageUrls ? target.imageUrls[0] : '';
+//   async function handleSendMessage() {
+//     if (messageContent.trim() !== '') {
+//       await sendMessage(user.id, selectedMatch.matchId, messageContent);
+//       setMessageContent('');
+//     }
+//   }
+
+//   function handleKeyDown(event) {
+//     if (event.key === 'Enter') {
+//       handleSendMessage();
+//     }
+//   }
+
+//   if (!matches) {
+//     return <div className="empty">Nenhum usuário encontrado...</div>;
+//   }
 
 //   return (
 //     <div className="matches-container">
-//       {newMatches && newMatches.length > 0 && (
-//         <div className={`match-container ${showMatch ? 'show' : ''}`}>
-//           <img src={itsmatch} alt="It's a match" />
-//           <img className="avatar" src={firstTargetImage} alt="Dev avatar" />
-//           <strong>{newMatches[0].name}</strong>
-//           <p>{newMatches[0].resume}</p>
-//           <button type="button" onClick={() => handleClickMatchSpan(newMatches[0])}>FECHAR</button>
+//       <div className="matches-menu">
+//         {matches.map((match) => (
+//           <img
+//             key={match.id}
+//             src={match.imageUrls ? match.imageUrls[0] : ''}
+//             alt={match.name || match.username}
+//             onClick={() => handleMatchClick(match)}
+//             className={selectedMatch && selectedMatch.id === match.id ? 'selected' : ''}
+//           />
+//         ))}
+//       </div>
+
+//       {selectedMatch ? (
+//         <div className="match-details">
+//           <div className="match-header">
+//             <img src={selectedMatch.imageUrls ? selectedMatch.imageUrls[0] : ''} alt={selectedMatch.name || selectedMatch.username} />
+//             <strong>{selectedMatch.name || selectedMatch.username}</strong>
+//           </div> 
+
+//           <div className="match-conversation">
+//             {   
+//               selectedMatch && selectedMatch.messages && 
+//               selectedMatch.messages.map((u) => {
+//                 const alignment = u.sender === user.id ? 'right' : 'left';
+//                 return (
+//                   <p key={u.id} style={{ textAlign: alignment }}>
+//                     {u.content}
+//                   </p>
+//                 );
+//               })
+//             }
+//           </div>
+
+//           <div className="message-input-container">
+//             <input 
+//               type="text"
+//               value={messageContent}
+//               onChange={(e) => setMessageContent(e.target.value)}
+//               onKeyDown={handleKeyDown}
+//               placeholder="Digite sua mensagem..."
+//             />
+//             <button type="button" onClick={handleSendMessage}>
+//               Enviar
+//             </button>
+//           </div>
+
+//           <div className="buttons">
+//             <button type="button" onClick={() => handleLike(selectedMatch.id)}>
+//               <img src={like} alt="Like" />
+//             </button>
+//           </div>
 //         </div>
-//       )}
-//       {user && matches && matches.length > 0 ? (
-//         <ul>
-//           {matches.map((u) => (
-//             <li key={u.id}>
-//               <footer>
-//                 <strong>{u.name || u.username}</strong>
-//               </footer>
-//               <div className="buttons">
-//                 <button type="button" onClick={() => handleLike(u.id)}>
-//                   <img src={like} alt="Like" />
-//                 </button>
-//               </div>
-//             </li>
-//           ))}
-//         </ul>
 //       ) : (
-//         <div className="empty">Nenhum usuário encontrado...</div>
+//         <div className="empty">Selecione um usuário...</div>
 //       )}
 //     </div>
 //   );
 // }
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useLoginContext } from '../context/LoginContext';
 import { useMatchContext } from '../context/MatchContext';
-import itsmatch from '../../src/assets/itsamatch.png';
 import like from '../../src/assets/like.svg';
-import { TUser } from '../Type';
+import { useNavigate } from 'react-router-dom';
 
-export default function MatchContainer({ newMatches, setMatchDev }) {
-  const { user, unlike_to } = useLoginContext();
-  const { matches, load_matches } = useMatchContext();
-  const [showMatch, setShowMatch] = useState(false);
+export default function MatchContainer() { 
+  const { user } = useLoginContext(); 
+  const { matches, load_matches, sendMessage, newMatches } = useMatchContext();
+  const navigate = useNavigate();
+  const [selectedMatch, setSelectedMatch] = useState(null);
+  const [messageContent, setMessageContent] = useState('');
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    console.log('______component did mount match conteiner');
+    console.log(matches);
+    if (matches && matches.length > 0) {
+      setSelectedMatch(matches[0]); // Seleciona o primeiro match por padrão
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log('______component did update user, navigate');
+    if (!user) {
+      navigate('/');
+      return;
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     if (user) {
-      load_matches(user.id);
-    }
+      console.log('______novo match na area vou atualizar os matches');
+      console.log(selectedMatch);
+      load_matches(user.id); 
+    } 
   }, [newMatches]);
 
   useEffect(() => {
-    if (newMatches.length > 0) {
-      setShowMatch(true);
-    }
-  }, [newMatches]);
+    const matchUpdated = matches.find((a) => a.id === selectedMatch?.id);
+    setSelectedMatch(matchUpdated);
+  }, [matches]);
 
-  async function handleLike(id: number) {
-    await unlike_to(user.id, id);
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [selectedMatch?.messages]);
+
+  async function handleLike(id) {
+    console.log(matches);
+    // await unlike_to(user.id, id);
   }
 
-  const handleClickMatchSpan = (newUser: TUser) => {
-    setShowMatch(false);
-    setTimeout(() => {
-      setMatchDev((prevMatchDev) => prevMatchDev.filter((user) => user.id !== newUser.id));
-    }, 1000); // Tempo da transição em milissegundos
-  };
+  function handleMatchClick(matc) {
+    setSelectedMatch(matc);
+  }
 
-  // const target = matches.find(t => t.id === newMatches[0]?.id);
-  // const firstTargetImage = target && target.imageUrls ? target.imageUrls[0] : '';
+  async function handleSendMessage() {
+    if (messageContent.trim() !== '') {
+      await sendMessage(user.id, selectedMatch.matchId, messageContent);
+      setMessageContent('');
+    }
+  }
 
-  const target = matches.length > 0 && newMatches.length > 0 ? matches.find(t=>t.id === newMatches[0].id) : null;
-  const firstTargetImage = target && target.imageUrls ? target?.imageUrls[0] : '';
+  function handleKeyDown(event) {
+    if (event.key === 'Enter') {
+      handleSendMessage();
+    }
+  }
+
+  if (!matches) {
+    return <div className="empty">Nenhum usuário encontrado...</div>;
+  }
 
   return (
     <div className="matches-container">
-      {newMatches && newMatches.length > 0 && target && (
-        <div className={`match-container ${showMatch ? 'show' : 'hide'}`}>
-          <img src={itsmatch} alt="It's a match" />
-          <img className="avatar" src={firstTargetImage} alt="Dev avatar" />
-          <strong>{target.name}</strong>
-          <p>{target.resume}</p>
-          <button type="button" onClick={() => handleClickMatchSpan(newMatches[0])}>FECHAR</button>
-        </div>
-      )}
-      {user && matches && matches.length > 0 ? (
-        <ul>
-          {matches.map((u) => (
-            <li key={u.id}>
-              <footer>
-                <strong>{u.name || u.username}</strong>
-              </footer>
-              <div className="buttons">
-                <button type="button" onClick={() => handleLike(u.id)}>
-                  <img src={like} alt="Like" />
-                </button>
-              </div>
-            </li>
+      <div>
+        <div className="matches-menu">
+          {matches.map((match) => (
+            <img
+              key={match.id}
+              src={match.imageUrls ? match.imageUrls[0] : ''}
+              alt={match.name || match.username}
+              onClick={() => handleMatchClick(match)}
+              className={selectedMatch && selectedMatch.id === match.id ? 'selected' : ''}
+            />
           ))}
-        </ul>
-      ) : (
-        <div className="empty">Nenhum usuário encontrado...</div>
-      )}
-    </div>
+        </div>
+
+        {selectedMatch ? (
+          <div className="match-details">
+            <div className="match-header">
+              <img src={selectedMatch.imageUrls ? selectedMatch.imageUrls[0] : ''} alt={selectedMatch.name || selectedMatch.username} />
+              <strong>{selectedMatch.name || selectedMatch.username}</strong>
+            </div> 
+
+            <div className="match-conversation">
+              {   
+                selectedMatch && selectedMatch.messages && 
+                selectedMatch.messages.map((u) => {
+                  const alignment = u.sender === user.id ? 'right' : 'left';
+                  return (
+                    <p key={u.id} style={{ textAlign: alignment }}>
+                      {u.content}
+                    </p>
+                  );
+                })
+              }
+              <div ref={messagesEndRef} />
+            </div>
+
+            <div className="message-input-container">
+              <input 
+                type="text"
+                value={messageContent}
+                onChange={(e) => setMessageContent(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Digite sua mensagem..."
+              />
+              <button type="button" onClick={handleSendMessage}>
+                Enviar
+              </button>
+            </div>
+
+            <div className="buttons">
+              <button type="button" onClick={() => handleLike(selectedMatch.id)}>
+                <img src={like} alt="Like" />
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="empty">Selecione um usuário...</div>
+        )}
+      </div>
+      </div>  
   );
 }

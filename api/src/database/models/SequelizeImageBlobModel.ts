@@ -8,8 +8,7 @@ import {
   import db from '.'; 
 import SequelizeUserModel from './SequelizeUserModel';
  
-  class SequelizeImageBlobModel extends Model<InferAttributes<SequelizeImageBlobModel>,
-  InferCreationAttributes<SequelizeImageBlobModel>> {
+class SequelizeImageBlobModel extends Model<InferAttributes<SequelizeImageBlobModel>,InferCreationAttributes<SequelizeImageBlobModel>> {
     declare id: CreationOptional<number>;
     declare fileName: string;
     declare fileData: Buffer;
@@ -25,17 +24,14 @@ import SequelizeUserModel from './SequelizeUserModel';
     },
     fileName: { type: DataTypes.STRING, allowNull: false },
     fileData: { type: DataTypes.BLOB, allowNull: false },
-    userId: {  // Chave estrangeira
+    userId: {  
       type: DataTypes.INTEGER,
       references: {
           model: SequelizeUserModel,
           key: 'id',
       },
       allowNull: false,
-  },
-    // username: { type: DataTypes.STRING, allowNull: false },
-    // password: { type: DataTypes.STRING, allowNull: false },
-    // image: {type: DataTypes.BLOB, allowNull: true}
+    },
   }, {
     sequelize: db,
     modelName: 'SequelizeImageBlobModel',

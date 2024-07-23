@@ -22,6 +22,7 @@ export default function Login() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    console.log('handleSubmit', isRegister)
  
     if (isRegister) {
       try {
@@ -33,6 +34,7 @@ export default function Login() {
       }
     } else {
       try {
+        console.log('chamarei log_in')
         const loggedInUser = await log_in(username, password);
         console.log(loggedInUser);
       } catch (error) {

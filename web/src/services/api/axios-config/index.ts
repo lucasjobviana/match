@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { responseInterceptor, errorInterceptor } from './interceptors';
 
-const HOST =   '192.168.200.110:3001';
+const HOST =   '182.30.0.11:3001';
 const PROTOCOL =   'http';
 
 const api = axios.create({

@@ -1,0 +1,11 @@
+<svg width="200" height="60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Coração -->
+  <path d="M10 30 
+           A 10 10, 0, 0, 1, 30 30 
+           A 10 10, 0, 0, 1, 50 30 
+           Q 50 50, 30 60 
+           Q 10 50, 10 30 
+           Z" fill="red" stroke="black" stroke-width="4"/>
+  <!-- Texto -->
+  <text x="16" y="50" font-family="Arial" font-size="35" fill="black">Match App</text>
+</svg>

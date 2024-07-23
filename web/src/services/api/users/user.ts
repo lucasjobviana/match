@@ -3,6 +3,7 @@ import { TUser } from '../../../Type';
 import { arrayBufferToBase64 } from '../../../util/util';
 
 export const login = async (username:string, password:string) => {
+  console.log('ca')
   const loggedUser = await api.post('/login',{
       username,password
   });
@@ -27,26 +28,24 @@ if(loggedUser) return loggedUser.data;
 return null;
 }
 
-export const getAllUsers = async (username:string | undefined) => {
-  const users = await api.get('/users', {
+export const getAllUsers = async (username:string | undefined, id:number) => {
+  const nextUser = await api.get('/users', {
     headers: {
       username: username,
+      id,
     }
-  }).then((response: { data: TUser[]; }) => {
+  }).then((response: { data: TUser; }) => {
     return response.data;
   });
-
-  const allUsers = users;
-  allUsers.forEach((user)=>{
-    if(user && user.images[0]){
-      const urls = user.images.map((image: { fileData: ArrayBuffer; fileName: string }) => {
-        return `data:image/png;base64,${arrayBufferToBase64(image.fileData.data)}`;
-      });
-      user.imageUrls = urls;
-    } 
-  })
-
-  return allUsers;
+  console.log(nextUser)
+  if(nextUser && nextUser.images && nextUser.images[0]){
+    const urls = nextUser.images.map((image: { fileData: ArrayBuffer; fileName: string }) => {
+      return `data:image/png;base64,${arrayBufferToBase64(image.fileData.data)}`;
+    });
+    nextUser.imageUrls = urls;
+  }
+  console.log(nextUser)
+  return nextUser;
 }; 
 
 export const likeTo = async (idLoggedUser:number, idTargetUser:number) => {
@@ -141,6 +140,13 @@ export const updateUser = async (idLoggedUser:number, formData:FormData) => {
   }).then((response: { data: TUser[]; }) => {
     return response.data;
   });
+
+  // if(user && user.images[0]){
+  //   const urls = user.images.map((image: { fileData: ArrayBuffer; fileName: string }) => {
+  //     return `data:image/png;base64,${arrayBufferToBase64(image.fileData.data)}`;
+  //   });
+  //   user.imageUrls = urls;
+  // }
 
   const user = updatedUser;
     if(user && user.images[0]){

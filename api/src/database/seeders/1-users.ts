@@ -1,5 +1,4 @@
 import { QueryInterface } from 'sequelize';
-import { password, username } from '../config/database';
 
 export default { 
   up: async (queryInterface: QueryInterface) => {
@@ -58,64 +57,64 @@ export default {
         password: 'a'
       },
       {
-        name:'Pessoa da Silva',
+        name:'Jessica da Silva',
         phone:'4799899455',
         username: 'silva',
         resume: 'Oque minha mãe não tinha de criatividade tinha de humor',
         password: 'a'
       },
       {
-        name:'Pessoa Viana ',
+        name:'Antonio Viana ',
         phone:'5585514722',
         username: 'viana',
         password: 'a'
       },
       {
-        name:'Pessoa das Neves ',
+        name:'Rodrigo das Neves ',
         phone:'5555441122',
         username: 'neves',
         password: 'a'
       },
       {
-        name:'Pessoa Oliveira',
+        name:'Carlos Oliveira',
         phone:'5555668855',
         username: 'oliveira',
         password: 'a'
       },
       {
-        name:'Pessoa Outra ',
+        name:'Michelly Outra ',
         phone:'4122553322',
         username: 'outra',
         resume: 'Outra vez estamos aqui novamente repetindo a mesma redundancia',
         password: 'a'
       },
       {
-        name:'Pessoa Junior',
+        name:'Arthur Junior',
         phone:'50445588825',
         username: 'junior',
         resume: 'Quem não gosta de arroz, que coma o feijão então',
         password: 'a'
       },
       {
-        name:'Pessoa Folk',
+        name:'Mellisa Folk',
         phone:'5522552552',
         username: 'folk',
         password: 'a'
       },
       {
-        name:'Pessoa Azul',
+        name:'Tomas Azul',
         phone:'4565858964',
         username: 'azul',
         password: 'a'
       },
       {
-        name:'Pessoa Pinto',
+        name:'Harry Pinto',
         phone:'1155228457',
         username: 'pinto',
         password: 'a'
       },
       {
-        name:'Pessoa Sardela',
+        name:'Marcela Sardela',
         phone:'8855221146',
         username: 'sardela',
         password: 'a'

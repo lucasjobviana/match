@@ -16,8 +16,6 @@ export default abstract class BaseService<T> implements IBaseService<T> {
   }
 
   public async update(id:string, obj:T){
-    console.log('service update: ', id)
-    console.log(obj)
     const updatedObj = await this.model.update(id, obj);
     return updatedObj;
   }

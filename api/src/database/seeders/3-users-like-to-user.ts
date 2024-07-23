@@ -8,6 +8,10 @@ export default {
         user_target_id: 2,
       },
       {
+        user_logged_id: 2,
+        user_target_id: 1,
+      },
+      {
         user_logged_id: 1,
         user_target_id: 3,
 
@@ -15,6 +19,14 @@ export default {
       {
         user_logged_id: 1,
         user_target_id: 4,
+      },
+      {
+        user_logged_id: 1,
+        user_target_id: 5,
+      },
+      {
+        user_logged_id: 1,
+        user_target_id: 6,
       }
     ], {});
   },
