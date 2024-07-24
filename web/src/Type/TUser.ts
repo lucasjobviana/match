@@ -10,8 +10,16 @@ export type TUser = {
   dislikeUsers?: TUser[],
   images?: ImageBlob[],
   matchedUsers?: TUser[],
+  messages?:Messages[],
   imageUrls?: string[]
 };
+
+type Messages = {
+  id: number,
+  content: string,
+  sender: number,
+  match: number,
+}
 
 interface ImageBlob {
   id: number;

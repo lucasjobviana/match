@@ -162,10 +162,11 @@ body {
 
 .match-container {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  z-index: 10;
+  top: 0vh;
+  left: 0vw;
+  right: 0vw;
+  bottom: 0vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -174,7 +175,6 @@ body {
   opacity: 0;  
   transform: scale(0.9);  
   transition: opacity 1s, transform 1s; 
-  max-width: 300px;
 }
 
 .match-container.show {
@@ -421,5 +421,7 @@ body {
   margin-left: 10px;  
 }
 
-
- 
+.new-message-alert {
+  /* border: 2px solid red; Adicione o estilo que deseja para alertar sobre a nova mensagem */
+  background-color: green;
+}

@@ -127,7 +127,7 @@ import dislike from '../../src/assets/dislike.svg';
 import { TUser } from '../Type';
 import { useLoginContext } from '../context/LoginContext';
 import LoggedUserDetailContainer from './LoggedUserDetailContainer';
-import BottomNav from './BottomNav';
+// import BottomNav from './BottomNav';
 // import BottomNav from './BottomNav';
 
 export default function Principal() {

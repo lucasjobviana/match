@@ -1,11 +1,11 @@
-import { createContext, useCallback, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useState } from "react"; 
 import { TUser } from "../Type"; 
 import { loadMatches, sendMessageTo } from "../services/api"
 import { IReactRCProps } from "./IReactDom";
  
 interface IMatchContext {
     matches: TUser[] | [];
-    setMatches: (matches: TUser[] | []) => void;
+    setMatches: (matches: TUser[] | []) => void; 
     newMatches: TUser[] | [];
     setNewMatches: (matches: TUser[]| []) => void;
     load_matches: (userId:number) => {};//sendMessage(user.id, selectedMatch.id, messageContent);
