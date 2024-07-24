@@ -23,7 +23,7 @@ const NotificationContext = createContext({} as INotificationContext);
 export const NotificationProvider = ({children}) => {
     const { user } = useLoginContext();
   const { setNewMatches, newMatches, setMatches, matches } = useMatchContext();
-  const [showMatch, setShowMatch] = useState(false);
+  const [showMatch, setShowMatch] = useState(false); 
   
 
   useEffect(() => {
@@ -43,16 +43,20 @@ export const NotificationProvider = ({children}) => {
             const newMatchs = [...matches];
             const updatedMatch = { ...newMatchs[targetMatchIndex] };
             updatedMatch.messages = [...updatedMatch.messages, messageObject];
+            console.log(updatedMatch.messages);
             newMatchs[targetMatchIndex] = updatedMatch;
             console.log('adicionando no newMessage')
             console.log(newMatchs)
-            setMatches(newMatchs);
+            setMatches(newMatchs); 
         } else {
             console.error('Match não encontrado');
         }
       });
-
+ 
       socket.on('match', (dev) => {
+        console.log('deu match em ');
+        console.log(dev)
+        console.log(JSON.parse(dev));
         setNewMatches((prevMatchDev) => [...prevMatchDev, JSON.parse(dev)]);
       });
 
